@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAGA｜本音の占い</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cinzel+Decorative:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080706;
+  --surface: #100f0d;
+  --surface2: #181714;
+  --gold: #c8a45a;
+  --gold-light: #e8c87a;
+  --gold-dim: #6a5828;
+  --red: #7a1818;
+  --text: #ede0c0;
+  --text-dim: #a09070;
+  --text-bright: #faf4e8;
+  --border: #2a2418;
+  --glow: rgba(200,164,90,0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* Stars background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(1px 1px at 10% 15%, rgba(200,164,90,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 40%, rgba(200,164,90,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 10%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 55%, rgba(200,164,90,0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 25%, rgba(255,255,255,0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 70%, rgba(200,164,90,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.1) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 5%, rgba(200,164,90,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 65%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 85%, rgba(200,164,90,0.2) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 70px 0 50px;
+}
+
+.header-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, var(--gold-dim));
+  margin: 0 auto 30px;
+}
+
+.title-en {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: clamp(48px, 10vw, 80px);
+  letter-spacing: 0.25em;
+  color: var(--gold);
+  text-shadow: 0 0 60px rgba(200,164,90,0.25), 0 0 120px rgba(200,164,90,0.1);
+  animation: pulse-gold 6s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes pulse-gold {
+  0%, 100% { text-shadow: 0 0 60px rgba(200,164,90,0.25), 0 0 120px rgba(200,164,90,0.1); }
+  50% { text-shadow: 0 0 80px rgba(200,164,90,0.4), 0 0 160px rgba(200,164,90,0.2); }
+}
+
+.title-ja {
+  font-size: 13px;
+  letter-spacing: 0.5em;
+  color: var(--text-dim);
+  margin-top: 12px;
+  display: block;
+}
+
+.header-desc {
+  margin-top: 28px;
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  line-height: 2;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 36px 0;
+}
+.divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--gold-dim), transparent); }
+.divider-diamond {
+  width: 8px; height: 8px;
+  background: var(--gold-dim);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 40px;
+}
+
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold-dim); }
+
+/* ── INPUT ── */
+.field {
+  margin-bottom: 20px;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.field input, .field textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-bright);
+  font-family: 'Shippori Mincho', serif;
+  font-size: 16px;
+  padding: 14px 18px;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  letter-spacing: 0.05em;
+}
+
+.field input:focus, .field textarea:focus {
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 20px var(--glow);
+}
+
+.field textarea {
+  height: 80px;
+  resize: none;
+  line-height: 1.7;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── BUTTON ── */
+.btn-wrap {
+  text-align: center;
+  margin-top: 36px;
+}
+
+.btn-divination {
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  padding: 18px 56px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.btn-divination::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(200,164,90,0.08) 100%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.btn-divination:hover {
+  border-color: var(--gold);
+  box-shadow: 0 0 30px var(--glow);
+  color: var(--gold-light);
+}
+.btn-divination:hover::before { opacity: 1; }
+
+/* ── LOADING ── */
+.loading {
+  display: none;
+  text-align: center;
+  padding: 60px 0;
+}
+
+.hexagram-anim {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.yao {
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  animation: yao-appear 0.5s ease forwards;
+}
+
+.yao:nth-child(1) { animation-delay: 0.2s; }
+.yao:nth-child(2) { animation-delay: 0.6s; }
+.yao:nth-child(3) { animation-delay: 1.0s; }
+.yao:nth-child(4) { animation-delay: 1.4s; }
+.yao:nth-child(5) { animation-delay: 1.8s; }
+.yao:nth-child(6) { animation-delay: 2.2s; }
+
+@keyframes yao-appear {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.yao-bar {
+  height: 4px;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(200,164,90,0.5);
+}
+
+.yao.yang .yao-bar { width: 60px; }
+.yao.yin .yao-bar { width: 26px; }
+
+.loading-text {
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: var(--text-dim);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ── RESULT ── */
+.result {
+  display: none;
+}
+
+.result-header {
+  text-align: center;
+  padding: 40px 0 30px;
+}
+
+.result-name {
+  font-size: 22px;
+  color: var(--text-bright);
+  letter-spacing: 0.2em;
+  margin-bottom: 6px;
+}
+
+.result-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.3em;
+}
+
+/* Result cards */
+.r-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+
+.r-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.r-card-head {
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.r-card-icon {
+  width: 6px; height: 6px;
+  background: var(--gold-dim);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+.r-card-title {
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+}
+
+.r-card-body {
+  padding: 20px;
+}
+
+.r-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.r-row:last-child { border-bottom: none; }
+
+.r-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  flex-shrink: 0;
+}
+
+.r-value {
+  font-size: 15px;
+  color: var(--text-bright);
+  text-align: right;
+  letter-spacing: 0.05em;
+}
+
+.r-value-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+/* 厄年警告 */
+.yakudoshi-warn {
+  background: rgba(122,24,24,0.2);
+  border: 1px solid var(--red);
+  padding: 12px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #d08080;
+  letter-spacing: 0.1em;
+  line-height: 1.7;
+}
+
+/* 易卦 */
+.hexagram-display {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.hexagram-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.h-yao {
+  display: flex;
+  gap: 5px;
+  height: 5px;
+}
+
+.h-yao.yang .h-bar { width: 56px; height: 5px; background: var(--gold); }
+.h-yao.yin .h-bar { width: 24px; height: 5px; background: var(--gold); }
+
+.hexagram-info { flex: 1; }
+
+.hex-name {
+  font-size: 22px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  margin-bottom: 4px;
+}
+
+.hex-read {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  margin-bottom: 10px;
+}
+
+.hex-meaning {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+}
+
+/* WAGA鑑定 */
+.waga-box {
+  border: 1px solid var(--gold-dim);
+  padding: 28px 24px;
+  position: relative;
+  margin-top: 4px;
+}
+
+.waga-box::before {
+  content: '卦';
+  position: absolute;
+  top: -12px;
+  left: 24px;
+  background: var(--bg);
+  padding: 0 8px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+}
+
+.waga-text {
+  font-size: 16px;
+  line-height: 2.2;
+  color: var(--text-bright);
+  letter-spacing: 0.08em;
+  white-space: pre-line;
+}
+
+.waga-sign {
+  text-align: right;
+  margin-top: 20px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+}
+
+/* ── パスコード解放UI ── */
+.passcode-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.passcode-box {
+  background: var(--surface);
+  border: 1px solid var(--gold-dim);
+  padding: 36px 28px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+}
+.passcode-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 18px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+.passcode-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  line-height: 2;
+  margin-bottom: 24px;
+}
+.passcode-input {
+  width: 100%;
+  background: #0d0c0b;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 22px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  padding: 14px;
+  outline: none;
+  margin-bottom: 16px;
+}
+.passcode-input::placeholder { color: var(--gold-dim); font-size: 14px; letter-spacing: 0.1em; }
+.passcode-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: 'Shippori Mincho', serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  padding: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 10px;
+}
+.passcode-btn:hover { background: rgba(200,164,90,0.1); }
+.passcode-btn-cancel {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  padding: 8px;
+  cursor: pointer;
+}
+.passcode-error {
+  font-size: 11px;
+  color: #c08080;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  display: none;
+}
+/* ── ロック済みカード ── */
+.locked-card {
+  position: relative;
+  overflow: hidden;
+}
+.locked-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(8,7,6,0) 0%, rgba(8,7,6,0.92) 50%, rgba(8,7,6,0.98) 100%);
+  pointer-events: none;
+}
+.lock-banner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  text-align: center;
+  padding: 20px 16px 24px;
+  pointer-events: all;
+}
+.lock-banner-title {
+  font-size: 12px;
+  color: var(--gold-dim);
+  letter-spacing: 0.25em;
+  margin-bottom: 8px;
+}
+.lock-banner-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  line-height: 1.9;
+  margin-bottom: 14px;
+}
+.lock-btn {
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-family: 'Shippori Mincho', serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.lock-btn:hover { border-color: var(--gold); background: rgba(200,164,90,0.08); }
+/* フォロー誘導 */
+.follow-box {
+  border: 1px solid var(--border);
+  padding: 28px;
+  text-align: center;
+  margin-top: 10px;
+  background: var(--surface);
+}
+
+.follow-title {
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.follow-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 2;
+  letter-spacing: 0.05em;
+  margin-bottom: 18px;
+}
+
+.follow-handle {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 18px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+}
+
+.btn-reset {
+  margin-top: 40px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'Shippori Mincho', serif;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  padding: 12px 36px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.3s;
+}
+.btn-reset:hover { border-color: var(--gold-dim); color: var(--text); }
+
+/* ── BIORHYTHM & CALENDAR ── */
+.bio-legend { display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap; }
+.bio-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); letter-spacing: 0.1em; }
+.bio-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.fortune-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+.fortune-tab {
+  padding: 10px 14px; font-size: 11px; letter-spacing: 0.15em; color: var(--text-dim);
+  cursor: pointer; border: none; border-bottom: 2px solid transparent;
+  background: transparent; font-family: "Shippori Mincho", serif; transition: all 0.3s;
+}
+.fortune-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.fortune-panel { display: none; padding-top: 14px; }
+.fortune-panel.active { display: block; }
+.cal-month-title { font-size: 11px; letter-spacing: 0.3em; color: var(--gold-dim); margin-bottom: 8px; text-align: center; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-header { text-align: center; font-size: 10px; color: var(--text-dim); padding: 4px 0; }
+.cal-day { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: var(--text); border: 1px solid transparent; border-radius: 2px; }
+.cal-day.today { border-color: var(--gold); color: var(--gold); font-weight: bold; }
+.cal-day .day-num { font-size: 11px; line-height: 1.2; }
+.cal-day .day-icon { font-size: 7px; }
+.cal-day.lv5 { background: rgba(200,164,90,0.45); border-color: rgba(200,164,90,0.6); }
+.cal-day.lv4 { background: rgba(200,164,90,0.22); }
+.cal-day.lv3 { background: rgba(80,160,100,0.25); }
+.cal-day.lv2 { background: rgba(80,100,180,0.18); }
+.cal-day.lv1 { background: transparent; }
+.cal-day.lv0 { background: rgba(160,50,50,0.35); color: #c08080; }
+
+
+/* ── 悩み選択肢 ── */
+.worry-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.worry-chip {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: "Shippori Mincho", serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.worry-chip:hover { border-color: var(--gold-dim); color: var(--text); }
+.worry-chip.selected { border-color: var(--gold); color: var(--gold); background: rgba(200,164,90,0.08); }
+
+/* ── 用語ポップアップ ── */
+.term-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1px solid var(--gold-dim); color: var(--gold-dim);
+  font-size: 10px; cursor: pointer; margin-left: 6px;
+  background: transparent; font-family: serif;
+  vertical-align: middle; transition: all 0.2s;
+  flex-shrink: 0;
+}
+.term-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+.term-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); z-index: 9000;
+  align-items: center; justify-content: center; padding: 20px;
+}
+.term-overlay.show { display: flex; }
+.term-box {
+  background: var(--surface2); border: 1px solid var(--gold-dim);
+  max-width: 500px; width: 100%; padding: 28px 24px; position: relative;
+}
+.term-box-title { font-size: 14px; color: var(--gold); letter-spacing: 0.2em; margin-bottom: 14px; }
+.term-box-body  { font-size: 13px; color: var(--text); line-height: 2; letter-spacing: 0.05em; }
+.term-close {
+  position: absolute; top: 12px; right: 16px;
+  background: transparent; border: none; color: var(--text-dim);
+  font-size: 18px; cursor: pointer; font-family: serif;
+}
+
+/* ── 相手入力 ── */
+.partner-section {
+  margin-top: 8px; border: 1px solid var(--border);
+  overflow: hidden; transition: max-height 0.4s ease;
+}
+.partner-toggle {
+  width: 100%; background: var(--surface2); border: none;
+  color: var(--text-dim); font-family: "Shippori Mincho", serif;
+  font-size: 12px; letter-spacing: 0.2em; padding: 12px 18px;
+  cursor: pointer; text-align: left; display: flex;
+  justify-content: space-between; align-items: center;
+  transition: color 0.2s;
+}
+.partner-toggle:hover { color: var(--text); }
+.partner-toggle .arrow { transition: transform 0.3s; }
+.partner-toggle.open .arrow { transform: rotate(180deg); }
+.partner-inner { padding: 16px; display: none; }
+.partner-inner.open { display: block; }
+
+/* ── 相性カード ── */
+.compat-bar-wrap { margin: 8px 0 4px; }
+.compat-bar-bg {
+  height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+}
+.compat-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(to right, var(--gold-dim), var(--gold));
+  transition: width 1s ease;
+}
+.compat-score { font-size: 22px; color: var(--gold); letter-spacing: 0.1em; }
+/* ── ERROR ── */
+.error-msg {
+  color: #d08080;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-top: 12px;
+  display: none;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-line"></div>
+    <span class="title-en">WAGA</span>
+    <span class="title-ja">本 音 の 占 い</span>
+    <p class="header-desc">
+      易・数秘術・姓名判断・九星気学・干支<br>
+      五つの占術があなたを多角的に鑑定する
+    </p>
+  </div>
+
+  <!-- INPUT FORM -->
+  <div id="form-section">
+    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+    <div class="section">
+      <div class="section-label">命術 — あなたの本質</div>
+      <div class="field">
+        <label>姓名（漢字）</label>
+        <input type="text" id="name" placeholder="例：山田花子 / やまだはなこ / ヤマダハナコ">
+      </div>
+      <div class="field">
+        <label>生年月日</label>
+        <div class="field-row">
+          <input type="number" id="year" placeholder="年（例：1990）" min="1900" max="2025">
+          <input type="number" id="month" placeholder="月（1〜12）" min="1" max="12">
+          <input type="number" id="day" placeholder="日（1〜31）" min="1" max="31">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">卜術 — 今この瞬間</div>
+      <div class="field">
+        <label>現在・今後の悩み（タップして選ぶ・複数可）</label>
+        <div class="worry-chips">
+          <button class="worry-chip" onclick="toggleChip(this,'恋愛・片思い')">💛 恋愛・片思い</button>
+          <button class="worry-chip" onclick="toggleChip(this,'仕事・転職')">📈 仕事・転職</button>
+          <button class="worry-chip" onclick="toggleChip(this,'お金・金運')">💰 お金・金運</button>
+          <button class="worry-chip" onclick="toggleChip(this,'健康・体調')">🌿 健康・体調</button>
+          <button class="worry-chip" onclick="toggleChip(this,'人間関係')">🤝 人間関係</button>
+          <button class="worry-chip" onclick="toggleChip(this,'結婚・家族')">🏠 結婚・家族</button>
+          <button class="worry-chip" onclick="toggleChip(this,'美容・外見')">✨ 美容・外見</button>
+          <button class="worry-chip" onclick="toggleChip(this,'将来・方向性')">🌟 将来・方向性</button>
+        </div>
+        <textarea id="question" placeholder="さらに詳しく書く場合はこちら（任意）" style="margin-top:8px;"></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">相性鑑定（任意）</div>
+      <div class="partner-section">
+        <button class="partner-toggle" id="partner-toggle" onclick="togglePartner()">
+          <span>💑 気になる相手の情報を入力する</span>
+          <span class="arrow">▼</span>
+        </button>
+        <div class="partner-inner" id="partner-inner">
+          <div class="field">
+            <label>相手の名前（漢字・ひらがな・カタカナ）</label>
+            <input type="text" id="p-name" placeholder="例：田中一郎 / たなかいちろう">
+          </div>
+          <div class="field">
+            <label>相手の生年月日</label>
+            <div class="field-row">
+              <input type="number" id="p-year"  placeholder="年" min="1900" max="2025">
+              <input type="number" id="p-month" placeholder="月" min="1" max="12">
+              <input type="number" id="p-day"   placeholder="日" min="1" max="31">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin:28px 0 20px;padding:18px 20px;background:rgba(200,164,90,0.05);border:1px solid var(--border);">
+      <div style="font-size:10px;letter-spacing:0.35em;color:var(--gold-dim);margin-bottom:12px;">占うと表示されるもの</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="font-size:12px;color:var(--text);letter-spacing:0.05em;line-height:1.8;">
+          ✦ あなたの本質（一生）<br>
+          ✦ 姓名判断 五格<br>
+          ✦ 数秘術 ライフパス<br>
+          ✦ 九星気学・干支
+        </div>
+        <div style="font-size:12px;color:var(--text);letter-spacing:0.05em;line-height:1.8;">
+          ✦ 今年の運勢・厄年判定<br>
+          ✦ 今週・今月・今年の流れ<br>
+          ✦ バイオリズムグラフ<br>
+          ✦ 今日の易・六十四卦<br>
+          ✦ 金運・恋愛・仕事カレンダー<br>
+          ✦ WAGAの本音鑑定
+        </div>
+      </div>
+    </div>
+    <div class="btn-wrap">
+      <button class="btn-divination" onclick="startDivination()">DIVINE</button>
+      <p class="error-msg" id="error-msg">名前・生年月日・悩みを入力してください</p>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div class="hexagram-anim" id="hex-anim"></div>
+    <p class="loading-text">卦を読んでいる…</p>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" id="result"></div>
+
+  <!-- パスコード入力オーバーレイ -->
+  <div class="passcode-overlay" id="passcode-overlay" style="display:none;">
+    <div class="passcode-box">
+      <div class="passcode-title">UNLOCK</div>
+      <div class="passcode-desc">
+        @jwagalab をフォロー＆いいねをすると<br>
+        毎週の投稿にパスコードを掲載しています。<br>
+        入力してコンテンツを解放してください。
+      </div>
+      <input class="passcode-input" id="passcode-input" type="text" placeholder="パスコードを入力" maxlength="10" autocomplete="off">
+      <div class="passcode-error" id="passcode-error">パスコードが違います</div>
+      <button class="passcode-btn" onclick="submitPasscode()">解放する</button>
+      <button class="passcode-btn-cancel" onclick="closePasscode()">キャンセル</button>
+    </div>
+  </div>
+
+  <!-- 用語ポップアップ -->
+  <div class="term-overlay" id="term-overlay" onclick="closeTerm()">
+    <div class="term-box" onclick="event.stopPropagation()">
+      <button class="term-close" onclick="closeTerm()">✕</button>
+      <div class="term-box-title" id="term-title"></div>
+      <div class="term-box-body"  id="term-body"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// パスコード・アクセス制御
+// ══════════════════════════════════════════
+
+// ★ パスコードはここで管理。毎週変更する。
+// follow: フォロー解放コード（毎週更新）
+// dm:     DM解放コード（固定またはユーザー個別）
+var PASSCODES = {
+  follow: ['WAGA0509', 'WAGA0516', 'WAGA0523'], // 今週・来週・再来週分
+  dm:     ['WAGADM01']
+};
+
+function getAccessLevel() {
+  var stored = '';
+  try { stored = sessionStorage.getItem('waga_access') || ''; } catch(e){}
+  if (stored === 'dm') return 2;
+  if (stored === 'follow') return 1;
+  return 0;
+}
+
+function setAccessLevel(level) {
+  try { sessionStorage.setItem('waga_access', level); } catch(e){}
+}
+
+function openPasscode() {
+  var overlay = document.getElementById('passcode-overlay');
+  var input   = document.getElementById('passcode-input');
+  var errEl   = document.getElementById('passcode-error');
+  if (overlay) { overlay.style.display = 'flex'; }
+  if (input)   { input.value = ''; input.focus(); }
+  if (errEl)   { errEl.style.display = 'none'; }
+}
+
+function closePasscode() {
+  var overlay = document.getElementById('passcode-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function submitPasscode() {
+  var input = document.getElementById('passcode-input');
+  var errEl = document.getElementById('passcode-error');
+  if (!input) return;
+  var code = input.value.trim().toUpperCase();
+
+  if (PASSCODES.dm.indexOf(code) >= 0) {
+    setAccessLevel('dm');
+    closePasscode();
+    refreshResult();
+    return;
+  }
+  if (PASSCODES.follow.indexOf(code) >= 0) {
+    setAccessLevel('follow');
+    closePasscode();
+    refreshResult();
+    return;
+  }
+  if (errEl) { errEl.style.display = 'block'; }
+}
+
+// Enterキーでも送信
+document.addEventListener('keydown', function(e) {
+  var overlay = document.getElementById('passcode-overlay');
+  if (overlay && overlay.style.display !== 'none' && e.key === 'Enter') {
+    submitPasscode();
+  }
+});
+
+// 解放後に結果を再描画
+var _savedDivination = null;
+function refreshResult() {
+  if (_savedDivination) {
+    var d = _savedDivination;
+    showResult(d.name, d.year, d.month, d.day, d.question);
+  }
+}
+
+// データベース
+
+// 九星
+const KYUSEI = ["一白水星","二黒土星","三碧木星","四緑木星","五黄土星","六白金星","七赤金星","八白土星","九紫火星"];
+const KYUSEI_MEANING = [
+  "水の星。柔軟・知恵・縁の下の力持ち。",
+  "土の星。忍耐・勤勉・蓄積する力。",
+  "木の星。行動力・直感・突破力。",
+  "木の星。社交性・柔軟・縁に恵まれる。",
+  "土の星。中心力・カリスマ・波乱含み。",
+  "金の星。指導力・完璧主義・天の加護。",
+  "金の星。社交・弁舌・楽しむ才能。",
+  "土の星。変革・努力・新しい時代を開く。",
+  "火の星。直感・美意識・頂点を目指す。"
+];
+
+// 干支
+const JIKKAN = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+const JUNISHI = ["子","丑","寅","卯","辰","巳","午","未","申","酉","戌","亥"];
+const JUNISHI_READ = ["ね","うし","とら","う","たつ","み","うま","ひつじ","さる","とり","いぬ","い"];
+const ETO_MEANING = [
+  "聡明・機転が利く・財運がある",
+  "忍耐強い・誠実・着実に積み上げる",
+  "行動力・決断力・勇敢",
+  "温和・穏やか・芸術的センス",
+  "寛大・信頼される・夢を実現する",
+  "直感鋭い・神秘的・慎重",
+  "情熱的・活力・人を引きつける",
+  "温厚・思いやり・平和を好む",
+  "知恵・行動力・器用",
+  "審美眼・几帳面・意志強固",
+  "誠実・正義感・最後まで諦めない",
+  "直感・包容力・忍耐"
+];
+
+// 数秘術 ライフパスナンバー
+const LIFEPATH_MEANING = {
+  1: "リーダー。自立心が強く、道を切り開く力がある。",
+  2: "協調者。直感が鋭く、人の心を読む力がある。",
+  3: "表現者。創造力と社交性を持ち、人を魅了する。",
+  4: "建設者。地道な努力で確実に積み上げる。",
+  5: "冒険者。変化を愛し、自由を求める魂。",
+  6: "養育者。責任感が強く、周囲を守る存在。",
+  7: "探求者。深く考え、真実を追い求める。",
+  8: "達成者。野心と実行力で大きな目標を実現する。",
+  9: "博愛者。広い視野と深い慈悲心を持つ。",
+  11: "直感者。霊的感受性が高く、啓示を受ける。",
+  22: "建築家。大きな夢を現実に変える力がある。",
+  33: "師。愛と知恵で世界を照らす存在。"
+};
+
+// 姓名判断 画数テーブル（代表的な漢字）
+const KAKUSU = {
+  "一":1,"二":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"九":9,"十":10,
+  "人":2,"大":3,"小":3,"山":3,"川":3,"子":3,"女":3,"男":7,"中":4,"上":3,
+  "下":3,"田":5,"木":4,"水":4,"火":4,"土":3,"金":8,"花":7,"空":8,"海":9,
+  "月":4,"日":4,"年":6,"太":4,"本":5,"石":5,"林":8,"森":12,"村":7,"町":7,
+  "東":8,"西":6,"南":9,"北":5,"新":13,"古":5,"高":10,"長":8,"白":5,"黒":11,
+  "青":8,"赤":7,"野":11,"原":10,"島":10,"岡":8,"松":8,"竹":6,"梅":10,"桜":10,
+  "春":9,"夏":10,"秋":9,"冬":5,"雪":11,"風":9,"雨":8,"光":6,"明":8,"暗":13,
+  "美":9,"良":7,"正":5,"清":11,"純":10,"健":11,"強":11,"優":17,"智":12,"幸":8,
+  "愛":13,"望":11,"希":7,"夢":13,"心":4,"魂":14,"気":6,"力":2,"命":8,"生":5,
+  "死":6,"神":9,"天":4,"地":6,"星":9,"宇":6,"宙":8,"道":12,"理":11,"法":8,
+  "和":8,"平":5,"安":6,"定":8,"永":5,"久":3,"真":10,"実":8,"誠":13,"信":9,
+  "義":13,"勇":9,"仁":4,"礼":5,"智":12,"忠":8,"孝":7,"徳":14,"恵":10,"恒":9,
+  "昭":9,"晴":12,"雅":13,"俊":9,"賢":16,"聡":17,"輝":15,"翔":12,"颯":14,"蒼":13,
+  "葵":12,"凛":15,"瑠":14,"璃":15,"琴":12,"桃":10,"莉":10,"奈":8,"那":7,"彩":11,
+  "菜":11,"咲":9,"萌":11,"芽":8,"朱":6,"紅":9,"紫":12,"碧":14,"翠":14,"藍":18,
+  "浩":10,"洋":9,"淳":11,"湊":12,"涼":11,"澄":15,"泉":9,"渚":11,"汐":6,"波":8,
+  "玲":9,"玉":5,"珠":10,"珍":9,"環":17,"璃":15,"琉":11,"琢":12,"瑛":12,"瑶":14,
+  "桂":10,"柊":9,"椿":13,"楓":13,"橘":16,"樹":16,"欅":21,"榎":14,"槻":15,"柾":9,
+  "謙":17,"遥":12,"遼":15,"逢":11,"逸":11,"郁":9,"都":11,"郷":11,"里":7,"丘":5,
+  "崇":11,"嵐":12,"峰":10,"峻":10,"岳":8,"嶺":17,"岬":8,"岩":8,"磯":17,"礁":17
+};
+
+function getKakusu(char) {
+  return KAKUSU[char] || 5; // デフォルト5画
+}
+
+// 六十四卦データ（代表的な32卦）
+const HEXAGRAMS = [
+  { name:"乾為天", read:"けんいてん", lines:[1,1,1,1,1,1], meaning:"強大な力。天の創造エネルギー。前進と突破の時。", advice:"今は動くとき。躊躇している時間はもったいない。", week:"今週は積極的に動くことで道が開けます。", month:"今月は大きな力が味方しています。チャンスを逃さないで。", year:"今年はエネルギーが充実している年。新しいことを始めるのに最適です。" },
+  { name:"坤為地", read:"こんいち", lines:[0,0,0,0,0,0], meaning:"大地の包容力。受け入れ、育てる力。", advice:"焦らず、今は静かに耐える時期です。", week:"今週は無理に動かず、周囲の流れを見守ることが大切。", month:"今月は蓄える月。結果を急がないことが吉。", year:"今年は土台を固める一年。地道な積み重ねが来年に実を結ぶ。" },
+  { name:"水雷屯", read:"すいらいちゅん", lines:[1,0,0,0,1,0], meaning:"始まりの混乱。産みの苦しみ。", advice:"混乱は始まりの証。腰を据えてじっくり向き合いましょう。", week:"今週は急展開より、一つずつ丁寧に整理するのが吉。", month:"今月は混乱の中に芽があります。焦らず根を張ることで来月が変わる。", year:"今年は試練の年かもしれません。でもこの経験が後の大きな力になります。" },
+  { name:"山水蒙", read:"さんすいもう", lines:[0,1,0,0,1,0], meaning:"未熟。学びの時。師を求めよ。", advice:"知らないことを恥じなくていい。今こそ学ぶ時期です。", week:"今週は教わること、吸収することに集中すると道が見えてきます。", month:"今月は学びに投資するのが吉。素直な姿勢が転機を呼びます。", year:"今年は成長の年。謙虚に学び続けた人が来年に大きく飛躍します。" },
+  { name:"水天需", read:"すいてんじゅ", lines:[1,0,0,1,1,1], meaning:"待機。好機を待て。焦りは禁物。", advice:"今は待つとき。しっかり準備を整えながら機を待ちましょう。", week:"今週は結論を急がないことが吉。準備が整った時に動くのが正解。", month:"今月はタイミングを見極める月。焦って動くと空回りしやすい。", year:"今年は準備と蓄積の一年。来年に向けての土台を整える時期です。" },
+  { name:"天水訟", read:"てんすいしょう", lines:[1,1,1,0,1,0], meaning:"争い。慎重に。勝ちを求めすぎると道を失う。", advice:"争いより和解の道を探すことが、長い目で見て得策です。", week:"今週は対立を避け、相手の立場も理解しようとする姿勢が大切。", month:"今月は主張より聴くことが大事。争って勝っても後悔が残りやすい。", year:"今年は調和を意識することで、大きな損失を避けられます。" },
+  { name:"地水師", read:"ちすいし", lines:[0,0,0,0,1,0], meaning:"統率。組織を動かす力。指導者の卦。", advice:"人を動かすには、まず信頼を積み重ねることが先です。", week:"今週はリーダーシップを発揮するより、仲間と連携することが吉。", month:"今月は人間関係を整えることで、来月の動きがスムーズになります。", year:"今年は人との信頼関係が財産になる年。丁寧に関係を育てましょう。" },
+  { name:"水地比", read:"すいちひ", lines:[0,1,0,0,0,0], meaning:"親しむ。協力関係。人との絆。", advice:"一人で抱え込まず、信頼できる仲間を頼ることが大切です。", week:"今週は人との連携が力になります。素直に助けを求めてみて。", month:"今月は人の縁が広がる月。大切な出会いを見逃さないように。", year:"今年は人間関係が大きなテーマ。信頼できる仲間を大切にする年です。" },
+  { name:"風天小畜", read:"ふうてんしょうちく", lines:[1,1,0,1,1,1], meaning:"蓄積。小さな積み重ね。準備の時。", advice:"大きなことより、今日の小さな一歩を大切にしましょう。", week:"今週は派手な動きより、着実な積み重ねが後で活きてくる。", month:"今月は蓄える時期。コツコツ続けたことが来月に花開く。", year:"今年はじっくり力を蓄える年。来年に大きく動くための準備期間です。" },
+  { name:"天沢履", read:"てんたくり", lines:[1,1,1,0,1,1], meaning:"礼節。丁寧な行動が吉を呼ぶ。", advice:"調子に乗らず、丁寧に一歩一歩進むことで道が開けます。", week:"今週は慎重さが武器。丁寧な言動が信頼につながります。", month:"今月は礼儀と誠実さが大きな味方になります。", year:"今年は誠実であり続けることが、大切なものを守ることにつながる年。" },
+  { name:"地天泰", read:"ちてんたい", lines:[0,0,0,1,1,1], meaning:"大吉。安泰。物事が順調に進む。", advice:"今は追い風です。恵まれた流れを活かして前に進みましょう。", week:"今週は物事がスムーズに流れやすい。積極的に動くのが吉。", month:"今月は好調な月。これまでの努力が形になりやすい時期です。", year:"今年は実りの年。積み上げてきたものが報われる大切な時期です。" },
+  { name:"天地否", read:"てんちひ", lines:[1,1,1,0,0,0], meaning:"停滞。閉塞感。変化の必要性を感じる時。", advice:"今の状況に固執せず、柔軟に変化を受け入れることが大切です。", week:"今週は無理に突き進まず、立ち止まって方向を見直す時間を。", month:"今月は変化の準備期間。現状維持ではなく、新しい視点が必要。", year:"今年は変革の年。手放すことで新しいものが入ってきます。" },
+  { name:"天火同人", read:"てんかどうじん", lines:[1,1,1,1,0,1], meaning:"共同。人との協力が力になる。", advice:"一人より二人。今は誰かと力を合わせることで道が開けます。", week:"今週は協力者を大切に。共に動くことで想像以上の結果が出やすい。", month:"今月は人との繋がりが財産になります。連絡を取っていない人に声をかけてみて。", year:"今年はチームワークが鍵。信頼できる仲間と一緒に動くことで大きな成果が。" },
+  { name:"火天大有", read:"かてんたいゆう", lines:[0,1,1,1,1,1], meaning:"大所有。豊かさ。才能が開花する時。", advice:"自分の力を信じていい時期です。遠慮せず発揮しましょう。", week:"今週はあなたの能力が輝きやすい。アピールするチャンスです。", month:"今月は豊かさが巡ってくる月。受け取る準備を整えておいて。", year:"今年は才能が花開く年。これまで磨いてきたものが評価されます。" },
+  { name:"地山謙", read:"ちさんけん", lines:[0,0,0,1,0,0], meaning:"謙虚。へりくだることが吉を呼ぶ。", advice:"今は出すぎず、静かに丁寧にいることが好結果につながります。", week:"今週は謙虚な姿勢が周囲の信頼を集めます。", month:"今月は控えめにしているほど、周囲からの評価が高まる。", year:"今年は謙虚さが武器になる年。黙々と積み上げた人が報われます。" },
+  { name:"雷地豫", read:"らいちよ", lines:[0,0,1,0,0,0], meaning:"喜び。準備万端。動く時が来ている。", advice:"足元をしっかり確認しながら、喜びとともに前に進みましょう。", week:"今週はポジティブなエネルギーが高まっている。楽しみながら動いて。", month:"今月は準備が実を結びやすい。思い切って一歩踏み出すのが吉。", year:"今年は喜びの年。楽しいと感じることを大切に行動してみて。" },
+  { name:"沢雷随", read:"たくらいずい", lines:[0,1,1,0,0,1], meaning:"随う。流れに乗ることが吉。", advice:"今は流れに逆らわず、自然な流れに身を委ねることが大切です。", week:"今週は無理に引っ張らず、物事の流れに乗ることでうまくいく。", month:"今月は柔軟性が大事。頑固にならず状況に合わせて動いて。", year:"今年は流れを読む力が問われる年。変化を恐れず受け入れる姿勢が吉。" },
+  { name:"山風蠱", read:"さんぷうこ", lines:[1,0,0,1,1,0], meaning:"腐敗を正す。改革。立て直しの時。", advice:"今こそ古くなったものを見直し、新しく整える良い機会です。", week:"今週は不要なものを手放すことで、動きが軽くなります。", month:"今月は見直しと整理整頓の月。腐ったものを手放すと道が開ける。", year:"今年は改革の年。過去のやり方に縛られず、新しい形を作る時。" },
+  { name:"地沢臨", read:"ちたくりん", lines:[0,0,0,0,1,1], meaning:"臨む。接近。好機が近づいている。", advice:"チャンスは目の前まで来ています。準備を整えて受け取りましょう。", week:"今週は積極的に動くことで、いい流れが生まれやすい。", month:"今月は近づいてくるチャンスを掴みに行く月。受け身は禁物。", year:"今年は好機の年。来るものを逃さないよう、アンテナを張り続けて。" },
+  { name:"風地観", read:"ふうちかん", lines:[1,1,0,0,0,0], meaning:"観る。静観。冷静に見渡す時。", advice:"感情で動かず、まずじっくり観察することが大切です。", week:"今週は行動より観察の週。見えていないことが見えてきます。", month:"今月は冷静な分析が力になる。焦って動かず、全体を見渡して。", year:"今年は洞察力が問われる年。見えないものを見ようとする姿勢が吉。" },
+  { name:"火雷噬嗑", read:"からいぜいごう", lines:[1,0,1,0,0,1], meaning:"噛み砕く。障害を乗り越える力。", advice:"立ちはだかるものがあっても、一つずつ丁寧に乗り越えられます。", week:"今週は問題から目を背けず、向き合うことで突破口が見えてくる。", month:"今月は障害が多いかもしれません。でも一つ解決するたびに力がつく。", year:"今年は試練を乗り越える力がついていく年。諦めずに向き合って。" },
+  { name:"山火賁", read:"さんかひ", lines:[1,0,0,1,0,1], meaning:"文飾。美しく整える。見せ方も大切。", advice:"中身だけでなく、伝え方・見せ方を整えることで評価が変わります。", week:"今週は表現することに力を入れてみて。言葉や見た目を磨くと吉。", month:"今月は見せ方を工夫することで反応が変わる。丁寧に整えて。", year:"今年はプレゼン力・表現力が鍵になる年。伝える力を磨きましょう。" },
+  { name:"山地剥", read:"さんちはく", lines:[1,0,0,0,0,0], meaning:"剥落。崩壊の前触れ。守ることが先決。", advice:"今は攻めるより、大切なものを守ることに集中しましょう。", week:"今週は新しいことを増やさず、今あるものを大切に守って。", month:"今月は守りの月。無理な拡大より現状維持が正解。", year:"今年は守りが大切な年。身を固めてから次のステップへ。" },
+  { name:"地雷復", read:"ちらいふく", lines:[0,0,0,0,0,1], meaning:"復活。再生。小さな光が戻ってくる。", advice:"終わりではありません。ここから再び始まる力があります。", week:"今週は小さな回復の兆しを見逃さないで。光は確かにあります。", month:"今月は再出発の月。過去を手放して新しい自分で動き始めて。", year:"今年は再生と復活の年。一度諦めかけたことが甦る可能性があります。" },
+  { name:"天雷无妄", read:"てんらいむもう", lines:[1,1,1,0,0,1], meaning:"無妄。自然の流れに逆らわないことが吉。", advice:"欲張らず、あるがままの流れに従うことが一番の近道です。", week:"今週は余計なことを考えず、自然体でいることが吉。", month:"今月は計算より直感に従う方がうまくいく。シンプルに動いて。", year:"今年は素直であることが最大の武器。無理な作り込みより本音で動く年。" },
+  { name:"山天大畜", read:"さんてんたいちく", lines:[1,0,0,1,1,1], meaning:"大蓄積。エネルギーを蓄える時。", advice:"今は貯める時期。使うのは後でいい。じっくり力を積んでいきましょう。", week:"今週は表に出るより、内側を充実させることに時間を使って。", month:"今月は蓄積の月。焦って使わずに、力を溜め込んでいく時期です。", year:"今年は充電の年。来年に向けての大きな蓄積を積み上げるとき。" },
+  { name:"山雷頤", read:"さんらいい", lines:[1,0,0,0,0,1], meaning:"養う。口にするもの、言葉に気をつけて。", advice:"食べ物も言葉も、体と心に入れるものを選ぶことが大切です。", week:"今週は食事と言葉に意識を向けて。小さな習慣が体と運を変える。", month:"今月は自分を養う月。無理せず、体と心のケアを優先して。", year:"今年は健康と言葉遣いを整える年。日常の積み重ねが運勢を変えます。" },
+  { name:"沢風大過", read:"たくふうたいか", lines:[0,1,1,1,1,0], meaning:"限界超過。頑張りすぎているサイン。", advice:"今のペースは少し限界に近いかもしれません。意識して休む時間を。", week:"今週は全力より７割の力で動く方が長続きします。", month:"今月は休息も仕事のうち。無理をしすぎると後でしわ寄せが来ます。", year:"今年はペースを整える年。頑張ることと休むことのバランスが鍵です。" },
+  { name:"坎為水", read:"かんいすい", lines:[0,1,0,0,1,0], meaning:"险难。深い穴。試練が続く時。", advice:"逃げても問題は消えません。真正面から向き合うことで道が開きます。", week:"今週は困難に見えることも、向き合い続けることで出口が見えてくる。", month:"今月は試練の月。しかし乗り越えた先に必ず光があります。", year:"今年は苦労が多い年かもしれません。でも、この経験がなければ得られない力があります。" },
+  { name:"離為火", read:"りいか", lines:[1,0,1,1,0,1], meaning:"燃える。情熱。明るく輝く力。", advice:"情熱は今のあなたの大きな武器。それを信じて動いていいです。", week:"今週はエネルギーが高まっています。思い切って自分を表現して。", month:"今月は情熱的に動くことで周囲を巻き込む力が生まれます。", year:"今年は輝きの年。自分の情熱を信じて突き進んでいいです。" },
+  { name:"沢山咸", read:"たくさんかん", lines:[0,1,1,1,0,0], meaning:"感応。引き合う力。縁の兆し。", advice:"感じている引力には意味があります。縁を大切にしましょう。", week:"今週は直感的に感じる縁を大事に。偶然の出会いが後で大切になる。", month:"今月は感受性が高まる月。感じたことを無視せず、縁を育てて。", year:"今年は縁が広がる年。人との繋がりが大切な財産になっていきます。" },
+  { name:"雷風恒", read:"らいふうこう", lines:[0,0,1,1,1,0], meaning:"恒久。継続する力。諦めないことが答え。", advice:"続けることが答えです。今日も一歩、動き続けましょう。", week:"今週は新しいことを始めるより、今やっていることを続けることが吉。", month:"今月は継続が力になる月。やめずに続けることで来月が変わります。", year:"今年は継続の年。コツコツ積み上げてきたものが花開く時期が来ます。" },
+  { name:"天山遯", read:"てんざんとん", lines:[1,1,1,1,0,0], meaning:"退く。引き時を見極める力。", advice:"今は引くことが正解かもしれません。意地を張らず、柔軟に。", week:"今週は無理に前に出ず、一歩引いてみることで見えてくるものがある。", month:"今月は戦略的に引くことが吉。全てに勝とうとしなくていい。", year:"今年は取捨選択が大事な年。手放すことで本当に大切なものが見えてきます。" },
+  { name:"雷天大壮", read:"らいてんたいそう", lines:[0,0,1,1,1,1], meaning:"大いに壮。力強く前進する時。", advice:"今のあなたには力があります。遠慮せず、堂々と進んでいいです。", week:"今週はエネルギーが充実しています。思い切って動いてみて。", month:"今月は強い月。これまで踏み出せなかったことに挑戦するのが吉。", year:"今年は飛躍の年。遠慮はいりません。大きく動いていい一年です。" },
+  { name:"火地晋", read:"かちしん", lines:[1,0,1,0,0,0], meaning:"進む。光が昇る。上昇の気配。", advice:"上を目指す気持ちを大切に。今がその時です。", week:"今週は前向きなエネルギーが上昇気流を作ります。積極的に動いて。", month:"今月は昇り調子の月。評価されやすい時期なので、見せ場を作って。", year:"今年は上昇の年。努力が評価に繋がりやすい、大切な一年です。" },
+  { name:"地火明夷", read:"ちかめいい", lines:[0,0,0,1,0,1], meaning:"光が隠れる。暗黒期。でも必ず光は戻る。", advice:"今は評価されにくいかもしれません。それでも腐らずに続けることが大切です。", week:"今週は結果より過程を大切に。報われない感覚があっても動き続けて。", month:"今月は忍耐の月。今見えていない光が、来月には顔を出します。", year:"今年は下積みの年。苦しくても続けた人に来年、必ず光が当たります。" },
+  { name:"火風鼎", read:"かふうてい", lines:[1,0,1,1,1,0], meaning:"鼎。改革・新しい体制を作る力。", advice:"古いものを手放して、新しく作り直す好機が来ています。", week:"今週は古いやり方を見直す時間を作って。変えることを恐れずに。", month:"今月は改革の月。思い切って仕組みを変えることで流れが生まれます。", year:"今年は大きな変革の年。新しい形を作ることで次のステージが開きます。" },
+  { name:"震為雷", read:"しんいらい", lines:[0,0,1,0,0,1], meaning:"震動。驚き。変化の予兆が来ている。", advice:"驚くことがあっても、それは成長の証。変化を受け入れていきましょう。", week:"今週は予想外のことが起きても焦らず。それが転機のサインです。", month:"今月は変化が多い月。でも変化は成長のチャンスでもあります。", year:"今年は変化の多い年。揺れを恐れず、それを力に変えていきましょう。" },
+  { name:"艮為山", read:"ごんいさん", lines:[1,0,0,1,0,0], meaning:"止まれ。静止。動かないことが正解の時。", advice:"動かないことが正解の時もあります。今は静かに留まって。", week:"今週は動き回るより、深く考える時間を大切にすることが吉。", month:"今月は立ち止まって振り返る月。焦って動くより、腰を落ち着けて。", year:"今年は内省の年。外に向かうより、自分の内側と向き合うことで次が見えてきます。" },
+  { name:"風山漸", read:"ふうさんぜん", lines:[1,1,0,1,0,0], meaning:"漸進。ゆっくり着実に進む力。", advice:"急がなくていいです。一歩一歩が確かな道を作っていきます。", week:"今週は焦らずゆっくりでいい。着実に進んでいることを信じて。", month:"今月はマイペースが吉。他の人と比べずに、自分のペースを守って。", year:"今年はゆっくりと確実に進む年。焦りを手放すことで力が出てきます。" },
+  { name:"沢地萃", read:"たくちすい", lines:[0,1,1,0,0,0], meaning:"集まる。人が集う。チャンスの気配。", advice:"人が集まる場所に飛び込んでみましょう。縁がそこにあります。", week:"今週は人との交流が力になります。引きこもらず外に出てみて。", month:"今月は集まりや交流の機会を大切に。そこに転機が隠れています。", year:"今年は人の縁が広がる年。集まる場に積極的に参加することで道が開けます。" },
+  { name:"地風升", read:"ちふうしょう", lines:[0,0,0,1,1,0], meaning:"上昇。着実に上がっていく流れ。", advice:"地道にやっていれば、必ず上がっていきます。焦らなくていい。", week:"今週は地道な作業が後で大きく実を結びます。", month:"今月は着実に上昇中。結果が出なくてもプロセスを信じて。", year:"今年は上昇の年。続けてきたことが認められ、ゆっくりと報われていきます。" },
+  { name:"沢水困", read:"たくすいこん", lines:[0,1,1,0,1,0], meaning:"困難。行き詰まりを感じる時。", advice:"今は苦しくても、出口は必ずあります。諦めないでください。", week:"今週は思うようにいかないことがあっても、それは一時的なもの。", month:"今月は行き詰まりを感じやすい月。でも次の月には必ず流れが変わります。", year:"今年は試練の年かもしれません。でもここを越えた先に大きな景色があります。" },
+  { name:"水風井", read:"すいふうせい", lines:[0,1,0,1,1,0], meaning:"井戸。資源。本質を掘り下げる力。", advice:"表面ではなく、本質を掘り下げることで本当の力が出てきます。", week:"今週は深く考えることに価値がある。表面的な答えで満足しないで。", month:"今月は自分の本質と向き合う月。根っこを掘り下げるほど力が湧いてくる。", year:"今年は本質を磨く年。見た目より中身を充実させることが長期的に効いてきます。" },
+  { name:"沢火革", read:"たくかかく", lines:[0,1,1,1,0,1], meaning:"革命。大変革の時が来ている。", advice:"今のままでは何かが変わらないかもしれません。変化を受け入れましょう。", week:"今週は思い切った変化が吉。小さな勇気が大きな流れを作ります。", month:"今月は変革の月。古い殻を破ることで新しい自分が出てきます。", year:"今年は革命の年。自分を変える覚悟ができた人に、大きなチャンスが来ます。" },
+  { name:"水沢節", read:"すいたくせつ", lines:[0,1,0,0,1,1], meaning:"節制。ほどほどが吉。", advice:"やりすぎは禁物。少し抑えることで長続きします。", week:"今週は全力投入より、セーブしながら動く方がうまくいく。", month:"今月は節制の月。欲張らず、必要なことだけに集中して。", year:"今年はバランスが大事な年。欲を抑えることが結果的に大きな実を結びます。" },
+  { name:"風沢中孚", read:"ふうたくちゅうふ", lines:[1,1,0,0,1,1], meaning:"誠信。真心が通じる時。", advice:"小細工より本音で動くことが、今は一番の近道です。", week:"今週は正直でいることが吉。真剣な姿勢が相手に伝わります。", month:"今月は誠実さが信頼を生む月。真心をもって動いた分が返ってきます。", year:"今年は本音と誠実さが武器になる年。作りものより本物が評価されます。" },
+  { name:"雷山小過", read:"らいさんしょうか", lines:[0,0,1,1,0,0], meaning:"小さな過ぎ。慎重さが吉を呼ぶ。", advice:"今は控えめにしていることが、ちょうどいいバランスです。", week:"今週は目立とうとしなくていい。静かに動く方が結果につながる。", month:"今月は大きく動くより、小さく丁寧に積み上げる月。", year:"今年は慎重さが武器。急がず、小さく着実に動き続けることが吉です。" },
+  { name:"水火既済", read:"すいかきさい", lines:[0,1,0,1,0,1], meaning:"完成。物事が成就する。", advice:"ここで満足せず、次のステージへの準備を始めましょう。", week:"今週は一区切りをつける週。完了したら次の目標を立てて。", month:"今月は完成の月。達成感を味わいながら、次へのエネルギーを充電して。", year:"今年は達成の年。積み上げてきたことが形になります。次の夢も同時に描いておきましょう。" },
+  { name:"火水未済", read:"かすいびさい", lines:[1,0,1,0,1,0], meaning:"未完成。まだ途中。諦めないことが全て。", advice:"まだ終わっていません。続けることが最大の答えです。", week:"今週は結果が出なくても諦めないで。途中であることは失敗ではありません。", month:"今月は完成を急がなくていい。未完であることに焦らず、続けることが吉。", year:"今年はまだ途中の年。焦らず、自分のペースで続けていきましょう。" },
+];
+
+// ══════════════════════════════════════════
+// 計算ロジック
+// ══════════════════════════════════════════
+
+function calcKyusei(year) {
+  const base = (year - 1984) % 9;
+  const idx = ((8 - base) % 9 + 9) % 9;
+  return { name: KYUSEI[idx], meaning: KYUSEI_MEANING[idx], idx };
+}
+
+function calcEto(year) {
+  const jikkanIdx = (year - 4) % 10;
+  const junishiIdx = (year - 4) % 12;
+  return {
+    jikkan: JIKKAN[(jikkanIdx + 10) % 10],
+    junishi: JUNISHI[(junishiIdx + 12) % 12],
+    junishiRead: JUNISHI_READ[(junishiIdx + 12) % 12],
+    meaning: ETO_MEANING[(junishiIdx + 12) % 12]
+  };
+}
+
+function calcLifePath(year, month, day) {
+  let sum = String(year).split('').reduce((a,b) => a + parseInt(b), 0)
+          + String(month).split('').reduce((a,b) => a + parseInt(b), 0)
+          + String(day).split('').reduce((a,b) => a + parseInt(b), 0);
+  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
+    sum = String(sum).split('').reduce((a,b) => a + parseInt(b), 0);
+  }
+  return { number: sum, meaning: LIFEPATH_MEANING[sum] || "強い意志と直感を持つ。" };
+}
+
+function calcSeimei(name) {
+  const clean = name.replace(/\s/g, '');
+  // ひらがな・カタカナを画数相当の数値に変換（音の画数）
+  function getCharScore(c) {
+    if (KAKUSU[c]) return KAKUSU[c];
+    // ひらがな（あ=1〜ん=46）
+    const hira = 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん';
+    const hiraIdx = hira.indexOf(c);
+    if (hiraIdx >= 0) return (hiraIdx % 10) + 1;
+    // カタカナ
+    const kata = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const kataIdx = kata.indexOf(c);
+    if (kataIdx >= 0) return (kataIdx % 10) + 1;
+    return 5;
+  }
+  const chars = clean.split('');
+  const counts = chars.map(c => getCharScore(c));
+  const total = counts.reduce((a, b) => a + b, 0);
+
+  // 簡易5格計算（姓2文字、名2文字想定）
+  const half = Math.floor(chars.length / 2);
+  const sei = chars.slice(0, half);
+  const mei = chars.slice(half);
+  const seiCount = sei.reduce((a, c) => a + getKakusu(c), 0);
+  const meiCount = mei.reduce((a, c) => a + getKakusu(c), 0);
+
+  const tenKaku = seiCount;
+  const jinKaku = seiCount + meiCount;
+  const chiKaku = meiCount;
+  const gaiKaku = (chars.length > 2) ? (getKakusu(chars[0]) + getKakusu(chars[chars.length-1])) : total;
+  const souKaku = total;
+
+  function kichi(n) {
+    const lucky = [1,3,5,6,7,8,11,13,15,16,17,18,21,23,24,25,29,31,32,33,35,37,38,39,41,45,47,48,52,57,58,61,63,65,67,68,81];
+    return lucky.includes(n % 81 || 81) ? "吉" : "凶";
+  }
+
+  return {
+    tenKaku: { value: tenKaku, judge: kichi(tenKaku) },
+    jinKaku: { value: jinKaku, judge: kichi(jinKaku) },
+    chiKaku: { value: chiKaku, judge: kichi(chiKaku) },
+    gaiKaku: { value: gaiKaku, judge: kichi(gaiKaku) },
+    souKaku: { value: souKaku, judge: kichi(souKaku) },
+  };
+}
+
+function calcYakudoshi(year, month, day) {
+  const today = new Date();
+  const age = today.getFullYear() - year - (today.getMonth() + 1 < month || (today.getMonth() + 1 === month && today.getDate() < day) ? 1 : 0);
+
+  // 男性厄年: 25, 42(大厄), 61 / 女性厄年: 19, 33(大厄), 37
+  // 性別不明のため両方チェック
+  const maleYaku = [24,25,26, 41,42,43, 60,61,62];
+  const femaleYaku = [18,19,20, 32,33,34, 36,37,38];
+  const maleLabel = ["前厄(25)","本厄(25)","後厄(25)","前厄(42)","本厄(42・大厄)","後厄(42)","前厄(61)","本厄(61)","後厄(61)"];
+  const femaleLabel = ["前厄(19)","本厄(19)","後厄(19)","前厄(33)","本厄(33・大厄)","後厄(33)","前厄(37)","本厄(37)","後厄(37)"];
+
+  const mIdx = maleYaku.indexOf(age);
+  const fIdx = femaleYaku.indexOf(age);
+
+  return {
+    age,
+    male: mIdx >= 0 ? maleLabel[mIdx] : null,
+    female: fIdx >= 0 ? femaleLabel[fIdx] : null,
+  };
+}
+
+function calcNenseiKyusei(year, baseIdx) {
+  // 今年の九星
+  const today = new Date();
+  const thisYear = today.getFullYear();
+  const diff = thisYear - year;
+  const thisYearIdx = ((baseIdx - diff) % 9 + 9) % 9;
+  return KYUSEI[thisYearIdx];
+}
+
+function getHexagram(year, month, day, question) {
+  // 質問文字コード + 生年月日から疑似的に卦を決定
+  let seed = year * 31 + month * 7 + day * 3;
+  for (let c of question) seed += c.charCodeAt(0);
+  // 今日の日付も混ぜる
+  const now = new Date();
+  seed += now.getDate() * 13 + (now.getMonth() + 1) * 17;
+  return HEXAGRAMS[((seed % HEXAGRAMS.length) + HEXAGRAMS.length) % HEXAGRAMS.length];
+}
+
+function generateWagaText(data) {
+  const { name, lifepath, kyusei, eto, hex } = data;
+  const firstName = name.replace(/\s/g, '').slice(-2); // 名前部分
+
+  const templates = [
+    `${firstName}さん、今日の卦は「${hex.name}」。\n\n${hex.meaning}\n\nあなたの数は${lifepath.number}。${lifepath.meaning}\n\n${kyusei.name}に生まれ、${eto.jikkan}${eto.junishi}の干支を持つあなたへ——\n\n${hex.advice}\n\n積み上げてきた時間は、必ず答えになります。`,
+    `「${hex.name}」が出ました。\n\n${hex.meaning}\n\n${firstName}さん、あなたはライフパス${lifepath.number}番。${lifepath.meaning}\n\nその性質が今、静かに問われています。\n\n${kyusei.name}の本質——${kyusei.meaning}\nこれがあなたの地盤です。\n\n${hex.advice}`,
+    `今日の卦——「${hex.name}」。${hex.read}。\n\n${hex.meaning}\n\nライフパス${lifepath.number}のあなたには、${lifepath.meaning}\nこれが天から与えられた性質です。\n\n${kyusei.name}・${eto.jikkan}${eto.junishi}。\nこの組み合わせが示すのは、あなたが思うより強い軸をすでに持っているということ。\n\n${hex.advice}\n\n今日が、静かな分岐点かもしれません。`
+  ];
+
+  const idx = (lifepath.number + hex.name.length) % templates.length;
+  return templates[idx];
+}
+
+
+// ══════════════════════════════════════════
+// バイオリズム計算
+// ══════════════════════════════════════════
+
+function calcBiorhythm(birthYear, birthMonth, birthDay) {
+  const birth = new Date(birthYear, birthMonth - 1, birthDay);
+  const today = new Date();
+  const days = Math.floor((today - birth) / (1000 * 60 * 60 * 24));
+  return {
+    physical:   Math.sin(2 * Math.PI * days / 23),
+    emotional:  Math.sin(2 * Math.PI * days / 28),
+    intellectual: Math.sin(2 * Math.PI * days / 33),
+    daysLived: days
+  };
+}
+
+function drawBiorhythm(canvasId, birthYear, birthMonth, birthDay) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = canvas.offsetWidth || 600;
+  const H = canvas.height = 160;
+  ctx.clearRect(0, 0, W, H);
+
+  const birth = new Date(birthYear, birthMonth - 1, birthDay);
+  const today = new Date();
+  const todayDays = Math.floor((today - birth) / (1000 * 60 * 60 * 24));
+
+  // Draw 30-day window: -10 to +20 days
+  const range = 30;
+  const startOffset = -10;
+  const midX = W * (10 / range);
+  const centerY = H / 2;
+  const amp = H * 0.42;
+
+  // Background grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= range; i += 5) {
+    const x = (i / range) * W;
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+
+  // Center line
+  ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0, centerY); ctx.lineTo(W, centerY); ctx.stroke();
+
+  // Today line
+  ctx.strokeStyle = 'rgba(200,164,90,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(midX, 0); ctx.lineTo(midX, H); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw curves
+  const cycles = [
+    { period: 23, color: '#e06060', label: '身体' },
+    { period: 28, color: '#60a0e0', label: '感情' },
+    { period: 33, color: '#60c878', label: '知性' },
+  ];
+
+  cycles.forEach(({ period, color }) => {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i <= range; i++) {
+      const d = todayDays + startOffset + i;
+      const v = Math.sin(2 * Math.PI * d / period);
+      const x = (i / range) * W;
+      const y = centerY - v * amp;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  });
+
+  // Today dots
+  cycles.forEach(({ period, color }) => {
+    const v = Math.sin(2 * Math.PI * todayDays / period);
+    const y = centerY - v * amp;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(midX, y, 4, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  // "今日" label
+  ctx.fillStyle = 'rgba(200,164,90,0.8)';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('今日', midX, 12);
+}
+
+// ══════════════════════════════════════════
+// 運勢カレンダー計算
+// ══════════════════════════════════════════
+
+function calcFortuneScore(birthYear, birthMonth, birthDay, targetDate, lifepathNum, hexIdx) {
+  const birth = new Date(birthYear, birthMonth - 1, birthDay);
+  const daysSinceBirth = Math.floor((targetDate - birth) / (1000 * 60 * 60 * 24));
+  
+  // バイオリズム複合スコア
+  const phys = Math.sin(2 * Math.PI * daysSinceBirth / 23);
+  const emo  = Math.sin(2 * Math.PI * daysSinceBirth / 28);
+  const intel = Math.sin(2 * Math.PI * daysSinceBirth / 33);
+  
+  // 日付数
+  const dateSum = targetDate.getDate() + targetDate.getMonth() + 1;
+  const luckBase = ((dateSum + lifepathNum + hexIdx) % 5);
+
+  return {
+    love:   (emo * 0.6 + phys * 0.3 + luckBase * 0.02),
+    money:  (intel * 0.5 + phys * 0.3 + emo * 0.1 + luckBase * 0.02),
+    work:   (intel * 0.6 + phys * 0.4),
+    overall:(phys + emo + intel) / 3 + luckBase * 0.05,
+  };
+}
+
+function getFortuneLevel(score) {
+  if (score > 0.5) return 5;
+  if (score > 0.2) return 4;
+  if (score > -0.1) return 3;
+  if (score > -0.4) return 2;
+  if (score > -0.6) return 1;
+  return 0;
+}
+
+function getIcon(level) {
+  return level >= 5 ? '★' : level >= 4 ? '◎' : level >= 3 ? '○' : level <= 0 ? '△' : '';
+}
+
+function buildCalendar(year, month, bY, bM, bD, lp, hi, mode) {
+  const today = new Date();
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month, 0);
+  const startDow = firstDay.getDay();
+  const days = ['日','月','火','水','木','金','土'];
+
+  const modeCfg = {
+    overall: { label:'総合運', desc:'全体的な運気の流れ', weight: function(s){ return s.overall; } },
+    love:    { label:'恋愛運', desc:'恋愛・人間関係',     weight: function(s){ return s.love * 1.4; } },
+    money:   { label:'金運',   desc:'お金・財運',         weight: function(s){ return s.money * 1.4; } },
+    work:    { label:'仕事運', desc:'仕事・勉強・決断',   weight: function(s){ return s.work * 1.4; } },
+  };
+  var cfg = modeCfg[mode] || modeCfg.overall;
+
+  var html = '<div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.2em;margin-bottom:10px;">'
+           + cfg.label + '（' + cfg.desc + '）</div>';
+  html += '<div class="cal-grid">';
+  for (var di = 0; di < days.length; di++) {
+    html += '<div class="cal-header">' + days[di] + '</div>';
+  }
+  for (var i = 0; i < startDow; i++) html += '<div class="cal-day empty"></div>';
+
+  for (var d = 1; d <= lastDay.getDate(); d++) {
+    var date = new Date(year, month - 1, d);
+    var scores = calcFortuneScore(bY, bM, bD, date, lp, hi);
+    var score = cfg.weight(scores);
+    var lv = getFortuneLevel(score);
+    var isToday = (date.toDateString() === today.toDateString());
+    var icon = lv >= 5 ? '★' : lv >= 4 ? '◎' : lv >= 3 ? '○' : lv <= 0 ? '△' : '';
+    var dow = date.getDay();
+    var extra = isToday ? ' today' : '';
+    var dowStyle = dow === 0 ? 'color:#d08080;' : dow === 6 ? 'color:#8090c8;' : '';
+    html += '<div class="cal-day lv' + lv + extra + '"'
+          + ' style="cursor:pointer;' + dowStyle + '"'
+          + ' data-day="' + d + '" data-lv="' + lv + '"'
+          + ' onclick="calDayClick(this)">'
+          + '<span class="day-num">' + d + '</span>'
+          + '<span class="day-icon">' + icon + '</span>'
+          + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function calDayClick(el) {
+  var day = parseInt(el.getAttribute('data-day'));
+  var lv  = parseInt(el.getAttribute('data-lv'));
+  showDayDetail(day, lv, _currentCalMode);
+}
+
+
+function showCal(mode, btnEl) {
+  _currentCalMode = mode;
+  // タブのアクティブ切り替え
+  if (btnEl) {
+    btnEl.closest('.fortune-tabs').querySelectorAll('.fortune-tab').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  // カレンダー再描画
+  const display = document.getElementById('cal-display');
+  const detail = document.getElementById('cal-day-detail');
+  if (display) display.innerHTML = buildCalendar(_calYear, _calMonth, _calBirthYear, _calBirthMonth, _calBirthDay, _calLifepath, _calHexIdx, mode);
+  if (detail) detail.innerHTML = '';
+}
+
+function showDayDetail(day, lv, mode) {
+  const detail = document.getElementById('cal-day-detail');
+  if (!detail) return;
+
+  const lvLabels = ['注意日', '普通', '平穏日', '好調日', '好調日', '最高運日'];
+  const modeAdvice = {
+    overall: {
+      5: { label:'★ 最高運日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
+           good:'大切な決断・新しいスタート・人に会う・発信・申し込みに最適な日。迷っていたことを動かすチャンスです。',
+           bad:'' },
+      4: { label:'◎ 好調日', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
+           good:'積極的に動いていい日。会議・交渉・新しい挑戦に向いています。',
+           bad:'' },
+      3: { label:'○ 平穏日', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
+           good:'普通に過ごすのが吉。無理せず、日常の作業を丁寧にこなして。',
+           bad:'' },
+      2: { label:'○ 普通日', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
+           good:'大きな行動は避け、準備・計画に使うといい日。',
+           bad:'' },
+      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
+           good:'特別なことは不要。いつも通りに過ごして。', bad:'' },
+      0: { label:'△ 注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
+           good:'',
+           bad:'大きな決断・契約・投資・喧嘩は避けて。体調管理を優先し、無理なスケジュールは組まないこと。休息が一番の運気回復です。' },
+    },
+    love: {
+      5: { label:'★ 恋愛最高日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
+           good:'告白・デート・プロポーズ・連絡に最適。気になる人に声をかけると吉。感情が素直に伝わりやすい日。',
+           bad:'' },
+      4: { label:'◎ 恋愛好調', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
+           good:'デート・食事・メッセージを送るのに向いています。相手との距離が縮まりやすい。',
+           bad:'' },
+      3: { label:'○ 平穏', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
+           good:'穏やかな関係を保てる日。焦らず自然体で。',
+           bad:'' },
+      2: { label:'ふつう', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
+           good:'無理なアプローチより、日常の積み重ねを大切に。', bad:'' },
+      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
+           good:'特別なことは不要。いつも通りに。', bad:'' },
+      0: { label:'△ 恋愛注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
+           good:'',
+           bad:'感情的な衝突や誤解が起きやすい日。重要な話し合い・告白・別れ話は避けて。相手の言葉を深読みしすぎないように。' },
+    },
+    money: {
+      5: { label:'★ 金運最高日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
+           good:'契約・購入・投資・申し込みに最適な日。財布を新しくする・宝くじを買う・貯金を始めるのも吉。',
+           bad:'' },
+      4: { label:'◎ 金運好調', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
+           good:'お金の動きが活発になりやすい日。見積もり・交渉・価格決定に向いています。',
+           bad:'' },
+      3: { label:'○ 平穏', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
+           good:'日常の出費を把握する・家計を見直すのに向いた日。',
+           bad:'' },
+      2: { label:'ふつう', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
+           good:'大きな買い物より、小さな節約を意識して。', bad:'' },
+      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
+           good:'特別なことは不要。いつも通りに。', bad:'' },
+      0: { label:'△ 金運注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
+           good:'',
+           bad:'衝動買い・大きな契約・投資・お金の貸し借りは避けて。財布のひもを締めて、今日は動かさないのが正解です。' },
+    },
+    work: {
+      5: { label:'★ 仕事最高日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
+           good:'重要な会議・プレゼン・面接・試験・商談に最適な日。集中力と判断力がピーク。思い切った行動を。',
+           bad:'' },
+      4: { label:'◎ 仕事好調', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
+           good:'企画・提案・新しいタスクのスタートに向いています。上司や取引先との話し合いも吉。',
+           bad:'' },
+      3: { label:'○ 平穏', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
+           good:'普通に仕事をこなす日。丁寧に、着実に。',
+           bad:'' },
+      2: { label:'ふつう', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
+           good:'大きな決断より、準備・整理・計画に使うと◎。', bad:'' },
+      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
+           good:'特別なことは不要。いつも通りに。', bad:'' },
+      0: { label:'△ 仕事注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
+           good:'',
+           bad:'ミスが出やすい日。重要な書類・メール・契約は念入りに確認して。無理なスケジュールは組まず、締め切りがある仕事は前日に済ませておくのが吉。' },
+    },
+  };
+
+  const safeLv = Math.max(0, Math.min(5, lv));
+  const cfg = (modeAdvice[mode] || modeAdvice.overall)[safeLv];
+  const hasGood = cfg.good && cfg.good.length > 0;
+  const hasBad  = cfg.bad  && cfg.bad.length  > 0;
+
+  detail.innerHTML =
+    '<div style="padding:14px 16px;border:1px solid ' + cfg.border + ';background:' + cfg.bg + ';border-radius:2px;">'
+    + '<div style="font-size:11px;color:var(--gold);letter-spacing:0.2em;margin-bottom:10px;">'
+    + _calMonth + '月' + day + '日　' + cfg.label + '</div>'
+    + (hasGood ? '<div style="font-size:13px;color:var(--text-bright);line-height:2;letter-spacing:0.05em;">'
+      + '✦ ' + cfg.good + '</div>' : '')
+    + (hasBad  ? '<div style="font-size:13px;color:#d09090;line-height:2;letter-spacing:0.05em;' + (hasGood ? 'margin-top:8px;' : '') + '">'
+      + '⚠ ' + cfg.bad + '</div>' : '')
+    + '</div>';
+}
+
+
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 悩みチップ
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function toggleChip(el, val) {
+  el.dataset.val = val;
+  el.classList.toggle('selected');
+}
+
+function togglePartner() {
+  var btn   = document.getElementById('partner-toggle');
+  var inner = document.getElementById('partner-inner');
+  btn.classList.toggle('open');
+  inner.classList.toggle('open');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 用語ポップアップ
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+var TERMS = {
+  'ライフパスナンバー': '生年月日の数字を全て足し、1桁になるまで繰り返した数字。その人の人生のテーマ・本質的な性格を表す。',
+  '九星気学': '生まれ年をもとに9種類の「星」に分類する日本の占術。一白水星〜九紫火星の9種類があり、その年の運気の流れや相性を見る。',
+  '干支': '10の天干（甲・乙・丙…）と12の地支（子・丑・寅…）の組み合わせ。60年で一巡する。性格・運命の傾向を示す。',
+  '姓名判断': '漢字の画数から運勢を見る占術。天格・人格・地格・外格・総格の「五格」で鑑定する。',
+  '天格': '姓の画数の合計。先祖から受け継いだ運。変えることができない先天的な運勢。',
+  '人格': '姓の最後の字と名の最初の字の合計。人生の中心となる主運。最も重要な格。',
+  '地格': '名前の画数の合計。幼少期〜青年期の運勢・才能・個性を表す。',
+  '外格': '姓の最初の字と名の最後の字の合計。社会的な運勢・対人関係を表す。',
+  '総格': '姓名全ての画数の合計。人生全体の総合運。晩年の運勢にも関わる。',
+  '易・六十四卦': '中国最古の占術。陰（━ ━）と陽（━━━）の組み合わせ6本で「卦」を作り64種類の状況を表す。今この瞬間の状況と指針を示す。',
+  'バイオリズム': '人間の身体・感情・知性には一定の周期があるという理論。身体23日・感情28日・知性33日周期で波を繰り返す。',
+  '厄年': '日本の伝統的な考えで、災難や病気が起きやすいとされる年齢。男性は25・42・61歳、女性は19・33・37歳が本厄。前後の年も前厄・後厄とされる。',
+  '命術': '生年月日・氏名など変わらない情報から運命を読む占術の総称。数秘術・九星気学・姓名判断など。答えは毎回同じ。',
+  '卜術': '今この瞬間の状況を読む占術の総称。易・タロットなど。答えは毎回変わる。',
+  '数秘術': '生年月日の数字から人生のテーマを読む西洋の占術。ライフパスナンバー1〜9（と11・22・33）で性格・運命を表す。',
+};
+
+function showTerm(key) {
+  var overlay = document.getElementById('term-overlay');
+  var title   = document.getElementById('term-title');
+  var body    = document.getElementById('term-body');
+  if (!overlay) return;
+  title.textContent = key;
+  body.textContent  = TERMS[key] || '説明は準備中です。';
+  overlay.classList.add('show');
+}
+function closeTerm() {
+  var overlay = document.getElementById('term-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 相性計算
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function calcCompatibility(myYear, myMonth, myDay, myName, pYear, pMonth, pDay, pName) {
+  var myLp  = calcLifePath(myYear, myMonth, myDay).number;
+  var pLp   = calcLifePath(pYear, pMonth, pDay).number;
+  var myKs  = calcKyusei(myYear).idx;
+  var pKs   = calcKyusei(pYear).idx;
+  var myEto = (myYear - 4) % 12;
+  var pEto  = (pYear  - 4) % 12;
+
+  // ライフパス相性（差が小さいほど高い）
+  var lpDiff = Math.abs(myLp - pLp);
+  var lpScore = lpDiff === 0 ? 100 : lpDiff <= 2 ? 85 : lpDiff <= 4 ? 70 : lpDiff <= 6 ? 55 : 40;
+
+  // 九星相性（三合・六合・比和・相剋）
+  var ksDiff = Math.abs(myKs - pKs) % 9;
+  var ksScore = ksDiff === 0 ? 95 : ksDiff === 3 || ksDiff === 6 ? 90 : ksDiff === 1 || ksDiff === 8 ? 75 : ksDiff === 4 || ksDiff === 5 ? 55 : 70;
+
+  // 干支相性
+  var etoDiff = Math.abs(((myEto + 12) % 12) - ((pEto + 12) % 12));
+  var etoScore = etoDiff === 0 ? 90 : etoDiff === 4 || etoDiff === 8 ? 95 : etoDiff === 6 ? 85 : etoDiff === 3 || etoDiff === 9 ? 70 : 75;
+
+  // 名前画数相性
+  var mySei = calcSeimei(myName).jinKaku.value;
+  var pSei  = calcSeimei(pName).jinKaku.value;
+  var nameDiff = Math.abs(mySei - pSei) % 9;
+  var nameScore = nameDiff <= 1 ? 90 : nameDiff <= 3 ? 80 : nameDiff <= 5 ? 65 : 55;
+
+  var overall = Math.round(lpScore * 0.3 + ksScore * 0.25 + etoScore * 0.25 + nameScore * 0.2);
+
+  // 相性コメント
+  var comment, advice;
+  if (overall >= 88) {
+    comment = '魂の共鳴。この出会いには深い意味があります。';
+    advice  = '自然体でいるだけで関係が深まります。焦らず、ありのままの自分で向き合って。';
+  } else if (overall >= 75) {
+    comment = '強い引き合い。互いに高め合える関係性。';
+    advice  = '価値観は近いけれど、少し違う部分が刺激になります。その違いを楽しんで。';
+  } else if (overall >= 62) {
+    comment = '補い合う関係。お互いに足りないものを持ち合っている。';
+    advice  = '最初は少し距離を感じるかもしれません。でも時間をかけるほど深まる縁です。';
+  } else if (overall >= 50) {
+    comment = '成長し合える縁。簡単ではないが得るものは大きい。';
+    advice  = '衝突が起きやすい組み合わせ。でも乗り越えるたびに絆が強くなります。';
+  } else {
+    comment = '刺激的な縁。違いが多い分、学びも多い関係。';
+    advice  = '無理に合わせようとしないこと。お互いの違いを認め、距離感を大切にして。';
+  }
+
+  // ── 相性の強み
+  var strength;
+  if (lpScore >= 85 && ksScore >= 85) {
+    strength = '価値観と感性の両方が重なる稀な組み合わせ。一緒にいるだけで互いのエネルギーが高まります。';
+  } else if (lpScore >= 85) {
+    strength = '人生の方向性と価値観がよく合っています。長期的な関係ほど安定感が増していきます。';
+  } else if (ksScore >= 85) {
+    strength = '気の流れが自然に合う関係。一緒にいて疲れない、居心地の良さが強みです。';
+  } else if (etoScore >= 90) {
+    strength = '干支の相性が抜群。直感的に惹かれ合う、縁の深い組み合わせです。';
+  } else if (overall >= 75) {
+    strength = '互いに刺激し合い、高め合える関係。一人ではできないことが二人なら叶います。';
+  } else {
+    strength = '違いが多い分、相手から学べることが多い関係。視野が広がる縁です。';
+  }
+
+  // ── 相性の課題
+  var challenge;
+  if (nameScore <= 60 && overall >= 75) {
+    challenge = '表面的な価値観や習慣の違いで摩擦が起きやすい。日常の小さなすり合わせが鍵です。';
+  } else if (lpDiff >= 5) {
+    challenge = '人生の優先順位が異なる場面が出てきます。どちらが正しいかではなく、違いを認める姿勢が大切。';
+  } else if (ksDiff === 4 || ksDiff === 5) {
+    challenge = '気の流れが逆向きになりやすい。お互いが疲れている時は無理に関わらず、距離を置くことも愛情です。';
+  } else if (overall < 62) {
+    challenge = '衝突が起きやすいタイミングがあります。感情的になる前に一呼吸おく習慣が関係を守ります。';
+  } else {
+    challenge = '良い関係だからこそ、甘えすぎに注意。感謝を言葉にする習慣が長続きの秘訣です。';
+  }
+
+  // ── 今月の二人の運気（バイオリズム重ね合わせ）
+  var today = new Date();
+  var myBio = calcBiorhythm(myYear, myMonth, myDay);
+  var pBio  = calcBiorhythm(pYear,  pMonth,  pDay);
+  var myAvg = (myBio.physical + myBio.emotional + myBio.intellectual) / 3;
+  var pAvg  = (pBio.physical  + pBio.emotional  + pBio.intellectual)  / 3;
+  var bioGap = myAvg - pAvg;
+  var bioMsg, bioAdvice;
+  if (myAvg > 0.3 && pAvg > 0.3) {
+    bioMsg    = '二人ともエネルギーが高い時期です。';
+    bioAdvice = '新しいことを一緒に始めるのに最適なタイミング。行動に移すなら今です。';
+  } else if (myAvg > 0.3 && pAvg < -0.3) {
+    bioMsg    = 'あなたは上昇期、相手は低調期です。';
+    bioAdvice = '今はあなたがリードする番。相手を引っ張りすぎず、そっと支える姿勢で。';
+  } else if (myAvg < -0.3 && pAvg > 0.3) {
+    bioMsg    = '相手は上昇期、あなたは低調期です。';
+    bioAdvice = '今月は相手の流れに乗る時期。自分から動くより、相手に委ねてみて。';
+  } else if (myAvg < -0.3 && pAvg < -0.3) {
+    bioMsg    = '二人ともエネルギーが落ち着いている時期です。';
+    bioAdvice = '無理に盛り上げようとしなくていい。ゆっくり過ごす時間が二人の絆を深めます。';
+  } else if (Math.abs(bioGap) > 0.5) {
+    bioMsg    = '二人の運気が少しずれています。';
+    bioAdvice = '気持ちのすれ違いが起きやすい時期。言葉で確認し合うことが大切です。';
+  } else {
+    bioMsg    = '二人の運気は穏やかに安定しています。';
+    bioAdvice = '派手さはないけれど、信頼を積み重ねるのに良い時期。日常の中で絆を育てて。';
+  }
+
+  // ── WAGAの本音（相性版）
+  var wagaCompatText;
+  if (overall >= 88) {
+    wagaCompatText = 'この二人の縁は、偶然ではない。星がそう言っている。大切にしなさい。';
+  } else if (overall >= 75) {
+    wagaCompatText = overall >= 80
+      ? '82点という数字より、二人が笑っている瞬間の数を数えなさい。それが本当の相性だ。'
+      : '高め合える関係というのは、楽な関係ではない。それでも一緒にいる理由がある。それが縁だ。';
+  } else if (overall >= 62) {
+    wagaCompatText = '時間をかけなさい。この縁は、急いで咲かせる花ではない。';
+  } else if (overall >= 50) {
+    wagaCompatText = '簡単な道ではない。でも、乗り越えた先にしか見えない景色がある。';
+  } else {
+    wagaCompatText = '違いは欠点ではない。あなたが持っていないものを、相手は持っている。';
+  }
+
+  return {
+    overall:       overall,
+    lpScore:       lpScore,
+    ksScore:       ksScore,
+    etoScore:      etoScore,
+    nameScore:     nameScore,
+    comment:       comment,
+    advice:        advice,
+    strength:      strength,
+    challenge:     challenge,
+    bioMsg:        bioMsg,
+    bioAdvice:     bioAdvice,
+    wagaCompatText: wagaCompatText,
+    myLp:          myLp,
+    pLp:           pLp,
+    myKyusei:      calcKyusei(myYear).name,
+    pKyusei:       calcKyusei(pYear).name,
+  };
+}
+
+// ══════════════════════════════════════════
+// グローバル変数（タブ切り替え用）
+// ══════════════════════════════════════════
+let _calBirthYear = 0, _calBirthMonth = 0, _calBirthDay = 0;
+let _calLifepath = 1, _calHexIdx = 0;
+let _calYear = 0, _calMonth = 0;
+
+// ══════════════════════════════════════════
+// UI ロジック
+// ══════════════════════════════════════════
+
+function startDivination() {
+  const name = document.getElementById('name').value.trim();
+  const year = parseInt(document.getElementById('year').value);
+  const month = parseInt(document.getElementById('month').value);
+  const day = parseInt(document.getElementById('day').value);
+  const err = document.getElementById('error-msg');
+
+  // 悩み：チップ選択 + テキスト入力を結合
+  var chips = [];
+  document.querySelectorAll('.worry-chip.selected').forEach(function(c){ chips.push(c.dataset.val); });
+  var freeText = document.getElementById('question').value.trim();
+  var question = chips.join('・') + (freeText ? ('　' + freeText) : '');
+  if (!question.trim()) question = '今後の流れ全般';
+
+  if (!name || !year || !month || !day) {
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
+
+  // 相手情報
+  window._partner = null;
+  var pName  = (document.getElementById('p-name')  || {}).value || '';
+  var pYear  = parseInt((document.getElementById('p-year')  || {}).value || '0');
+  var pMonth = parseInt((document.getElementById('p-month') || {}).value || '0');
+  var pDay   = parseInt((document.getElementById('p-day')   || {}).value || '0');
+  if (pName.trim() && pYear && pMonth && pDay) {
+    window._partner = { name: pName.trim(), year: pYear, month: pMonth, day: pDay };
+  }
+
+  document.getElementById('form-section').style.display = 'none';
+
+  // Loading
+  const loading = document.getElementById('loading');
+  loading.style.display = 'block';
+  buildHexAnim();
+
+  setTimeout(() => {
+    loading.style.display = 'none';
+    _savedDivination = { name, year, month, day, question };
+    showResult(name, year, month, day, question);
+  }, 3200);
+}
+
+function buildHexAnim() {
+  const container = document.getElementById('hex-anim');
+  container.innerHTML = '';
+  const pattern = ['yang','yin','yang','yin','yang','yin'];
+  pattern.forEach(type => {
+    const yao = document.createElement('div');
+    yao.className = `yao ${type}`;
+    if (type === 'yang') {
+      const bar = document.createElement('div');
+      bar.className = 'yao-bar';
+      yao.appendChild(bar);
+    } else {
+      for (let i = 0; i < 2; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'yao-bar';
+        yao.appendChild(bar);
+      }
+    }
+    container.appendChild(yao);
+  });
+}
+
+function showResult(name, year, month, day, question) {
+  const lifepath = calcLifePath(year, month, day);
+  const kyusei = calcKyusei(year);
+  const eto = calcEto(year);
+  const seimei = calcSeimei(name);
+  const yakudoshi = calcYakudoshi(year, month, day);
+  const hex = getHexagram(year, month, day, question);
+  const thisYearKyusei = calcNenseiKyusei(year, kyusei.idx);
+
+  const wagaText = generateWagaText({ name, lifepath, kyusei, eto, hex, yakudoshi, seimei });
+
+  // 相性計算
+  var compatHTML = '';
+  if (window._partner) {
+    var p = window._partner;
+    var compat = calcCompatibility(year, month, day, name, p.year, p.month, p.day, p.name);
+    compatHTML = '<div class="r-card">'
+      + '<div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">💑 相性鑑定 ― ' + name.replace(/\s/g,'') + ' × ' + p.name.replace(/\s/g,'') + '</span></div>'
+      + '<div class="r-card-body">'
+      + '<div style="text-align:center;padding:16px 0 8px;">'
+      + '<div class="compat-score">' + compat.overall + '<span style="font-size:14px;color:var(--text-dim);">点</span></div>'
+      + '<div style="font-size:12px;color:var(--text-dim);margin-top:4px;letter-spacing:0.1em;">総合相性</div>'
+      + '</div>'
+      + '<div class="compat-bar-wrap"><div class="compat-bar-bg"><div class="compat-bar-fill" style="width:' + compat.overall + '%;"></div></div></div>'
+      + '<div style="margin-top:16px;font-size:14px;color:var(--gold);letter-spacing:0.1em;line-height:1.8;">' + compat.comment + '</div>'
+      + '<div style="margin-top:10px;font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">' + compat.advice + '</div>'
+      + '<div style="margin-top:16px;">'
+      + '<div class="r-row"><span class="r-label">数秘術の相性</span><div class="r-value">あなた ' + compat.myLp + ' × 相手 ' + compat.pLp + '　<span style="color:var(--gold);">' + compat.lpScore + '点</span></div></div>'
+      + '<div class="r-row"><span class="r-label">九星気学の相性</span><div class="r-value">' + compat.myKyusei + ' × ' + compat.pKyusei + '　<span style="color:var(--gold);">' + compat.ksScore + '点</span></div></div>'
+      + '<div class="r-row"><span class="r-label">姓名の相性</span><div class="r-value"><span style="color:var(--gold);">' + compat.nameScore + '点</span></div></div>'
+      + '</div>'
+      + '</div></div>';
+  }
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.style.display = 'block';
+
+  // アクセスレベル取得
+  var accessLevel = getAccessLevel(); // 0=無料, 1=フォロー解放済み, 2=DM解放済み
+
+  // ロックバナーHTML生成
+  function lockBanner(type) {
+    if (type === 'follow') {
+      return '<div class="lock-banner">'
+        + '<div class="lock-banner-title">🔒 フォロー解放コンテンツ</div>'
+        + '<div class="lock-banner-desc">@jwagalab をフォロー＆いいねで<br>毎週の投稿にパスコードを掲載しています</div>'
+        + '<button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>'
+        + '</div>';
+    }
+    return '<div class="lock-banner">'
+      + '<div class="lock-banner-title">🔒 DM解放コンテンツ</div>'
+      + '<div class="lock-banner-desc">@jwagalab にフォロー＆「鑑定希望」とDMを<br>送ることで手動解放します</div>'
+      + '<button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>'
+      + '</div>';
+  }
+
+  resultDiv.innerHTML = `
+    <div class="result-header">
+      <div class="result-name">${name}</div>
+      <div class="result-sub">${year}年${month}月${day}日生まれ</div>
+    </div>
+
+    <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
+
+    <!-- 命術：本質（無料） -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">命術 ― あなたの本質（一生）<button class="term-btn" onclick="showTerm('命術')">？</button></span></div>
+      <div class="r-card-body">
+        <div class="r-row">
+          <span class="r-label">数秘術 ライフパス<button class="term-btn" onclick="showTerm('数秘術')">？</button></span>
+          <div>
+            <div class="r-value">${lifepath.number}番</div>
+            <div class="r-value-sub">${lifepath.meaning}</div>
+          </div>
+        </div>
+        <div class="r-row">
+          <span class="r-label">九星気学<button class="term-btn" onclick="showTerm('九星気学')">？</button></span>
+          <div>
+            <div class="r-value">${kyusei.name}</div>
+            <div class="r-value-sub">${kyusei.meaning}</div>
+          </div>
+        </div>
+        <div class="r-row">
+          <span class="r-label">干支<button class="term-btn" onclick="showTerm('干支')">？</button></span>
+          <div>
+            <div class="r-value">${eto.jikkan}${eto.junishi}（${eto.jikkan}の${eto.junishiRead}）</div>
+            <div class="r-value-sub">${eto.meaning}</div>
+          </div>
+        </div>
+        <div class="r-row">
+          <span class="r-label">姓名判断<button class="term-btn" onclick="showTerm('姓名判断')">？</button></span>
+          <div>
+            <div class="r-value">天格${seimei.tenKaku.value}画(${seimei.tenKaku.judge}) 人格${seimei.jinKaku.value}画(${seimei.jinKaku.judge})</div>
+            <div class="r-value-sub">地格${seimei.chiKaku.value}画(${seimei.chiKaku.judge}) 外格${seimei.gaiKaku.value}画(${seimei.gaiKaku.judge}) 総格${seimei.souKaku.value}画(${seimei.souKaku.judge})</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 卜術：今日の卦（無料） -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">卜術 ― 今日の卦<button class="term-btn" onclick="showTerm('卜術')">？</button>（${new Date().getMonth()+1}月${new Date().getDate()}日）</span></div>
+      <div class="r-card-body">
+        <div class="r-row" style="flex-direction:column; gap:16px; align-items:flex-start;">
+          <div class="hexagram-display">
+            <div class="hexagram-lines">
+              ${hex.lines.slice().reverse().map(l => `
+                <div class="h-yao ${l === 1 ? 'yang' : 'yin'}">
+                  ${l === 1 ? '<div class="h-bar"></div>' : '<div class="h-bar"></div><div class="h-bar"></div>'}
+                </div>`).join('')}
+            </div>
+            <div class="hexagram-info">
+              <div class="hex-name">${hex.name}</div>
+              <div class="hex-read">${hex.read}</div>
+              <div class="hex-meaning">${hex.meaning}</div>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--text-dim); letter-spacing:0.1em;">あなたの問い：「${question}」</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- バイオリズム（無料・グラフのみ） -->
+    <div class="r-card" id="bio-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">バイオリズム<button class="term-btn" onclick="showTerm('バイオリズム')">？</button>（過去10日〜今後20日）</span></div>
+      <div class="r-card-body">
+        <canvas id="bio-canvas" style="width:100%;display:block;"></canvas>
+        <div class="bio-legend">
+          <div class="bio-legend-item"><div class="bio-dot" style="background:#e06060;"></div>身体（23日周期）</div>
+          <div class="bio-legend-item"><div class="bio-dot" style="background:#60a0e0;"></div>感情（28日周期）</div>
+          <div class="bio-legend-item"><div class="bio-dot" style="background:#60c878;"></div>知性（33日周期）</div>
+        </div>
+        ${accessLevel >= 1 ? `
+        <div style="margin-top:14px;">
+          <div class="r-row">
+            <span class="r-label">今日の状態</span>
+            <div id="bio-today-text" style="font-size:13px;color:var(--text-bright);text-align:right;"></div>
+          </div>
+        </div>` : `
+        <div style="margin-top:16px;padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 フォロー解放コンテンツ</div>
+          <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">@jwagalab をフォロー＆いいねで<br>毎週の投稿にパスコードを掲載しています</div>
+          <button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>
+        </div>`}
+      </div>
+    </div>
+
+    <!-- 今年の運勢（フォロー解放） -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">今年の運勢（${new Date().getFullYear()}年）</span></div>
+      <div class="r-card-body">
+        ${accessLevel >= 1 ? `
+        <div class="r-row">
+          <span class="r-label">今年の九星</span>
+          <div><div class="r-value">${thisYearKyusei}</div></div>
+        </div>
+        <div class="r-row">
+          <span class="r-label">現在の年齢</span>
+          <div><div class="r-value">${yakudoshi.age}歳</div></div>
+        </div>
+        ${yakudoshi.male || yakudoshi.female ? `
+        <div class="yakudoshi-warn">
+          ⚠ 厄年の可能性あり <button class="term-btn" onclick="showTerm('厄年')" style="border-color:#c08080;color:#c08080;">？</button><br>
+          ${yakudoshi.male ? `男性：${yakudoshi.male}` : ''}${yakudoshi.male && yakudoshi.female ? ' / ' : ''}${yakudoshi.female ? `女性：${yakudoshi.female}` : ''}<br>
+          <span style="font-size:11px;opacity:0.8;">神社での祈祷・行動の慎重さを。</span>
+        </div>` : `
+        <div class="r-row">
+          <span class="r-label">厄年判定</span>
+          <div><div class="r-value">該当なし</div></div>
+        </div>`}` : `
+        <div style="padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 フォロー解放コンテンツ</div>
+          <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">@jwagalab をフォロー＆いいねで<br>毎週の投稿にパスコードを掲載しています</div>
+          <button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>
+        </div>`}
+      </div>
+    </div>
+
+    <!-- 時間軸の運勢（フォロー解放） -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">時間軸の運勢</span></div>
+      <div class="r-card-body">
+        ${accessLevel >= 1 ? `
+        <div class="r-row">
+          <span class="r-label">今週</span>
+          <div style="flex:1;padding-left:16px;"><div class="r-value" style="font-size:13px;text-align:right;">${hex.week}</div></div>
+        </div>
+        <div class="r-row">
+          <span class="r-label">今月</span>
+          <div style="flex:1;padding-left:16px;"><div class="r-value" style="font-size:13px;text-align:right;">${hex.month}</div></div>
+        </div>
+        <div class="r-row">
+          <span class="r-label">今年</span>
+          <div style="flex:1;padding-left:16px;"><div class="r-value" style="font-size:13px;text-align:right;">${hex.year}</div></div>
+        </div>` : `
+        <div style="padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 フォロー解放コンテンツ</div>
+          <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">@jwagalab をフォロー＆いいねで<br>毎週の投稿にパスコードを掲載しています</div>
+          <button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>
+        </div>`}
+      </div>
+    </div>
+
+    <!-- 運勢カレンダー（フォロー解放） -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">今月の運勢カレンダー</span></div>
+      <div class="r-card-body">
+        ${accessLevel >= 1 ? `
+        <div class="fortune-tabs">
+          <button class="fortune-tab active" onclick="showCal('overall',this)">⭐ 総合</button>
+          <button class="fortune-tab" onclick="showCal('love',this)">💛 恋愛</button>
+          <button class="fortune-tab" onclick="showCal('money',this)">💰 金運</button>
+          <button class="fortune-tab" onclick="showCal('work',this)">📈 仕事</button>
+        </div>
+        <div id="cal-display" style="margin-top:14px;"></div>
+        <div id="cal-day-detail" style="margin-top:12px;min-height:60px;"></div>
+        <div style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);font-size:11px;color:var(--text-dim);line-height:2;">
+          <span style="color:var(--gold);">★</span> 最高運日　
+          <span style="color:rgba(200,164,90,0.9);">◎</span> 好調日　
+          <span style="color:rgba(80,200,120,0.9);">○</span> 平穏日　
+          <span style="color:#c08080;">△</span> 注意日<br>
+          日付をタップすると過ごし方が表示されます
+        </div>` : `
+        <div style="padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 フォロー解放コンテンツ</div>
+          <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">@jwagalab をフォロー＆いいねで<br>毎週の投稿にパスコードを掲載しています</div>
+          <button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>
+        </div>`}
+      </div>
+    </div>
+
+    <!-- WAGAの鑑定（フォロー解放） -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">WAGA の鑑定</span></div>
+      <div class="r-card-body">
+        ${accessLevel >= 1 ? `
+        <div class="waga-box">
+          <div class="waga-text">${wagaText}</div>
+          <div class="waga-sign">― WAGA</div>
+        </div>` : `
+        <div style="padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 フォロー解放コンテンツ</div>
+          <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">@jwagalab をフォロー＆いいねで<br>毎週の投稿にパスコードを掲載しています</div>
+          <button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>
+        </div>`}
+      </div>
+    </div>
+
+    <!-- 相性鑑定（スコアは全員・詳細はフォロー解放・深掘りはDM解放） -->
+    ${window._partner ? `
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">💑 相性鑑定 ― ${name.replace(/\s/g,'')} × ${window._partner.name.replace(/\s/g,'')}</span></div>
+      <div class="r-card-body">
+        ${(()=>{
+          var p = window._partner;
+          var c = calcCompatibility(year,month,day,name,p.year,p.month,p.day,p.name);
+          var html = '';
+
+          // ── 無料：スコア＋バー（全員）
+          html += `<div style="text-align:center;padding:16px 0 8px;">
+            <div class="compat-score">${c.overall}<span style="font-size:14px;color:var(--text-dim);">点</span></div>
+            <div style="font-size:12px;color:var(--text-dim);margin-top:4px;letter-spacing:0.1em;">総合相性</div>
+          </div>
+          <div class="compat-bar-wrap"><div class="compat-bar-bg"><div class="compat-bar-fill" style="width:${c.overall}%;"></div></div></div>`;
+
+          if (accessLevel >= 1) {
+            // ── フォロー解放：コメント＋詳細点数
+            html += `<div style="margin-top:20px;">
+              <div style="font-size:14px;color:var(--gold);letter-spacing:0.1em;line-height:1.8;">${c.comment}</div>
+              <div style="margin-top:10px;font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">${c.advice}</div>
+              <div style="margin-top:16px;">
+                <div class="r-row"><span class="r-label">数秘術の相性</span><div class="r-value">あなた ${c.myLp} × 相手 ${c.pLp}　<span style="color:var(--gold);">${c.lpScore}点</span></div></div>
+                <div class="r-row"><span class="r-label">九星気学の相性</span><div class="r-value">${c.myKyusei} × ${c.pKyusei}　<span style="color:var(--gold);">${c.ksScore}点</span></div></div>
+                <div class="r-row"><span class="r-label">姓名の相性</span><div class="r-value"><span style="color:var(--gold);">${c.nameScore}点</span></div></div>
+              </div>
+            </div>`;
+
+            if (accessLevel >= 2) {
+              // ── DM解放：強み・課題・今月の運気・WAGAの本音
+              html += `<div style="margin-top:24px;border-top:1px solid var(--border);padding-top:20px;">
+
+                <div style="margin-bottom:18px;">
+                  <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">▶ 二人の強み</div>
+                  <div style="font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">${c.strength}</div>
+                </div>
+
+                <div style="margin-bottom:18px;">
+                  <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">▶ 注意したいこと</div>
+                  <div style="font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">${c.challenge}</div>
+                </div>
+
+                <div style="margin-bottom:18px;padding:14px 16px;background:rgba(200,164,90,0.04);border:1px solid var(--border);">
+                  <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:10px;">▶ 今月の二人の運気</div>
+                  <div style="font-size:13px;color:var(--gold);letter-spacing:0.05em;margin-bottom:6px;">${c.bioMsg}</div>
+                  <div style="font-size:12px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;">${c.bioAdvice}</div>
+                </div>
+
+                <div style="padding:16px;background:rgba(255,255,255,0.02);border-left:2px solid var(--gold-dim);">
+                  <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:10px;">WAGA の本音</div>
+                  <div style="font-size:13px;color:var(--text);line-height:2.2;letter-spacing:0.08em;font-style:italic;">${c.wagaCompatText}</div>
+                  <div style="font-size:11px;color:var(--gold-dim);text-align:right;margin-top:8px;letter-spacing:0.2em;">― WAGA</div>
+                </div>
+
+              </div>`;
+            } else {
+              // DM解放バナー
+              html += `<div style="margin-top:20px;padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+                <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 DM解放コンテンツ</div>
+                <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">
+                  二人の強み・課題・今月の運気・WAGAの本音<br>
+                  @jwagalab に「鑑定希望」とDMで解放
+                </div>
+                <button class="lock-btn" onclick="openPasscode()">DMパスコードを入力して解放</button>
+              </div>`;
+            }
+          } else {
+            // フォロー解放バナー
+            html += `<div style="margin-top:16px;padding:14px 16px;border:1px solid var(--gold-dim);text-align:center;">
+              <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">🔒 フォロー解放コンテンツ</div>
+              <div style="font-size:11px;color:var(--text-dim);letter-spacing:0.1em;line-height:1.9;margin-bottom:12px;">相性コメント・詳細分析は<br>@jwagalab フォロー＆パスコードで解放</div>
+              <button class="lock-btn" onclick="openPasscode()">パスコードを入力して解放</button>
+            </div>`;
+          }
+
+          return html;
+        })()}
+      </div>
+    </div>` : ''}
+
+    <!-- Glow肌診断 誘導 -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">✨ あなたの肌に本当に合うコスメ、知っていますか？</span></div>
+      <div class="r-card-body">
+        <div style="padding:4px 0 12px;font-size:13px;color:var(--text);line-height:2.2;letter-spacing:0.05em;">
+          ${(()=>{
+            const bio = calcBiorhythm(year, month, day);
+            const emoPct = Math.round((bio.emotional + 1) / 2 * 100);
+            if (emoPct >= 70) {
+              return `今日の感情バイオリズムは<span style="color:var(--gold);">${emoPct}%</span>と高め。<br>肌の調子も整いやすい今日、スキンケアを見直すのに最適なタイミングです。`;
+            } else if (emoPct >= 40) {
+              return `今日の感情バイオリズムは<span style="color:var(--gold);">${emoPct}%</span>。<br>コツコツと肌ケアを続けることが、じわじわと効いてくる時期です。`;
+            } else {
+              return `今日はゆっくり休む日。<br>肌も同じ。無理な新製品より、今の肌に合ったものを丁寧に使うことが大切です。`;
+            }
+          })()}
+        </div>
+        <div style="margin:4px 0 16px;padding:14px 16px;background:rgba(200,164,90,0.04);border:1px solid var(--gold-dim);">
+          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:10px;">GLOW 肌診断とは</div>
+          <div style="font-size:12px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;">
+            40ブランド・864パターンのデータベースから<br>
+            あなたの肌タイプ・悩み・予算に合った<br>
+            スキンケアをたった30秒で提案します。
+          </div>
+        </div>
+        <a href="https://j-waga.github.io/glow-skin/glow_skin_diagnosis.html"
+           target="_blank"
+           style="display:block;text-align:center;padding:16px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:'Shippori Mincho',serif;font-size:12px;letter-spacing:0.35em;text-decoration:none;transition:background 0.3s;"
+           onmouseover="this.style.background='rgba(200,164,90,0.1)'"
+           onmouseout="this.style.background='transparent'">
+          Glow 無料肌診断を試してみる →
+        </a>
+      </div>
+    </div>
+
+    <!-- フォロー誘導 -->
+    <div class="r-card">
+      <div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">詳細鑑定を受け取る（無料）</span></div>
+      <div class="r-card-body">
+        <div class="follow-box">
+          <div class="follow-title">WAGA の本音、さらに深く。</div>
+          <div class="follow-desc">
+            フォロー ＆ この投稿にいいねをして<br>
+            DMで「鑑定希望」と送ってください。<br>
+            WAGAが直接、あなただけに返します。
+          </div>
+          <div class="follow-handle">@jwagalab</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetForm()">もう一度占う</button>
+  `;
+
+  // カード出現アニメーション
+  setTimeout(() => {
+    document.querySelectorAll('.r-card').forEach((card, i) => {
+      setTimeout(() => card.classList.add('visible'), i * 150);
+    });
+  }, 100);
+
+  // バイオリズム描画
+  setTimeout(() => {
+    drawBiorhythm('bio-canvas', year, month, day);
+    if (getAccessLevel() >= 1) {
+      const bio = calcBiorhythm(year, month, day);
+      const phyPct = Math.round((bio.physical + 1) / 2 * 100);
+      const emoPct = Math.round((bio.emotional + 1) / 2 * 100);
+      const intPct = Math.round((bio.intellectual + 1) / 2 * 100);
+      const el = document.getElementById('bio-today-text');
+      if (el) el.innerHTML = '身体 ' + phyPct + '% &nbsp;感情 ' + emoPct + '% &nbsp;知性 ' + intPct + '%';
+    }
+  }, 400);
+
+  // カレンダー生成
+  const lifepathNum = lifepath.number;
+  const hexIdx = HEXAGRAMS.indexOf(hex);
+  const now = new Date();
+  const calYear = now.getFullYear();
+  const calMonth = now.getMonth() + 1;
+
+  // グローバル変数にセット（タブ切り替え時に再利用）
+  _calBirthYear = year; _calBirthMonth = month; _calBirthDay = day;
+  _calLifepath = lifepathNum; _calHexIdx = hexIdx < 0 ? 0 : hexIdx;
+  _calYear = calYear; _calMonth = calMonth;
+
+  // 総合カレンダーを初期表示
+  const calDisplay = document.getElementById('cal-display');
+  if (calDisplay) calDisplay.innerHTML = buildCalendar(calYear, calMonth, year, month, day, lifepathNum, hexIdx < 0 ? 0 : hexIdx, 'overall');
+}
+
+function resetForm() {
+  document.getElementById('result').style.display = 'none';
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('form-section').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
