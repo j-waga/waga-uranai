@@ -12,8 +12,68 @@
   </script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAGA｜本音の占い</title>
+<title>WAGA｜本音の無料占い ― 易・数秘術・姓名判断・九星気学・干支</title>
+
+<!-- ── SEO / 基本メタ ── -->
+<meta name="description" content="名前と生年月日だけで、易・数秘術・姓名判断・九星気学・干支の5占術があなたを無料で本格鑑定。本質・今年の運勢・厄年・バイオリズム・相性・今日の卦まで、これひとつで分かります。">
+<meta name="keywords" content="無料占い,占い,数秘術,ライフパスナンバー,九星気学,姓名判断,易,六十四卦,干支,相性占い,バイオリズム,運勢,厄年,本質診断">
+<meta name="author" content="jwagalab">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#080706">
+<link rel="canonical" href="https://j-waga.github.io/waga-uranai/">
+
+<!-- ── OGP (Facebook / LINE / note など) ── -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WAGA｜本音の占い">
+<meta property="og:title" content="WAGA｜本音の無料占い">
+<meta property="og:description" content="名前と生年月日だけで、易・数秘術・姓名判断・九星気学・干支の5占術があなたを無料で本格鑑定。本質・今年の運勢・相性・今日の卦まで一度に占えます。">
+<meta property="og:url" content="https://j-waga.github.io/waga-uranai/">
+<meta property="og:image" content="https://j-waga.github.io/waga-uranai/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WAGA 本音の占い ― 易・数秘術・姓名判断・九星気学・干支">
+<meta property="og:locale" content="ja_JP">
+
+<!-- ── Twitter (X) カード ── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WAGA｜本音の無料占い">
+<meta name="twitter:description" content="名前と生年月日だけで5占術が無料で本格鑑定。本質・運勢・相性・今日の卦まで一度に占えます。">
+<meta name="twitter:image" content="https://j-waga.github.io/waga-uranai/ogp.png">
+
+<!-- ── ファビコン / アイコン ── -->
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- ── フォント（表示速度: preconnect） ── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=Cinzel+Decorative:wght@400;700&family=Shippori+Mincho:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- ── 構造化データ (JSON-LD) ── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "WAGA｜本音の占い",
+  "url": "https://j-waga.github.io/waga-uranai/",
+  "description": "名前と生年月日だけで、易・数秘術・姓名判断・九星気学・干支の5占術があなたを無料で本格鑑定するオンライン占いツール。",
+  "applicationCategory": "LifestyleApplication",
+  "operatingSystem": "All",
+  "inLanguage": "ja",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "jwagalab",
+    "url": "https://j-waga.github.io/waga-uranai/"
+  }
+}
+</script>
 <style>
 :root {
   --bg: #080706;
@@ -82,6 +142,7 @@ body::before {
   margin: 0 auto 30px;
 }
 
+.site-title { margin: 0; font-weight: 400; }
 .title-en {
   font-family: 'Cinzel Decorative', serif;
   font-size: clamp(48px, 10vw, 80px);
@@ -135,6 +196,7 @@ body::before {
 
 .section-label {
   font-size: 10px;
+  font-weight: 400;
   letter-spacing: 0.4em;
   color: var(--gold-dim);
   text-transform: uppercase;
@@ -763,8 +825,7 @@ body::before {
   <!-- HEADER -->
   <div class="header">
     <div class="header-line"></div>
-    <span class="title-en">WAGA</span>
-    <span class="title-ja">本 音 の 占 い</span>
+    <h1 class="site-title"><span class="title-en">WAGA</span><span class="title-ja">本 音 の 占 い</span></h1>
     <p class="header-desc">
       易・数秘術・姓名判断・九星気学・干支<br>
       五つの占術があなたを多角的に鑑定する
@@ -776,7 +837,7 @@ body::before {
     <div class="divider"><div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div></div>
 
     <div class="section">
-      <div class="section-label">命術 — あなたの本質</div>
+      <h2 class="section-label">命術 — あなたの本質</h2>
       <div class="field">
         <label>姓名（漢字）</label>
         <input type="text" id="name" placeholder="例：山田花子 / やまだはなこ / ヤマダハナコ">
@@ -792,7 +853,7 @@ body::before {
     </div>
 
     <div class="section">
-      <div class="section-label">卜術 — 今この瞬間</div>
+      <h2 class="section-label">卜術 — 今この瞬間</h2>
       <div class="field">
         <label>現在・今後の悩み（タップして選ぶ・複数可）</label>
         <div class="worry-chips">
@@ -810,7 +871,7 @@ body::before {
     </div>
 
     <div class="section">
-      <div class="section-label">相性鑑定（任意）</div>
+      <h2 class="section-label">相性鑑定（任意）</h2>
       <div class="partner-section">
         <button class="partner-toggle" id="partner-toggle" onclick="togglePartner()">
           <span>💑 気になる相手の情報を入力する</span>

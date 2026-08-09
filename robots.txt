@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://j-waga.github.io/waga-uranai/sitemap.xml
