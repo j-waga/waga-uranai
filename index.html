@@ -1866,8 +1866,9 @@ function buildHexAnim() {
 
 function showResult(name, year, month, day, question) {
   const lifepath = calcLifePath(year, month, day);
-  const kyusei = calcKyusei(year);
-  const eto = calcEto(year);
+  const astroYear = (month < 2 || (month === 2 && day < 4)) ? year - 1 : year;
+  const kyusei = calcKyusei(astroYear);
+  const eto = calcEto(astroYear);
   const seimei = calcSeimei(name);
   const yakudoshi = calcYakudoshi(year, month, day);
   const hex = getHexagram(year, month, day, question);
