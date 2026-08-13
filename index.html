@@ -1323,22 +1323,9 @@ function getHexagram(year, month, day, question) {
   return HEXAGRAMS[((seed % HEXAGRAMS.length) + HEXAGRAMS.length) % HEXAGRAMS.length];
 }
 
-function generateWagaText(data) {
-  const { name, lifepath, kyusei, eto, hex } = data;
-  const firstName = name.replace(/\s/g, '').slice(-2); // 名前部分
-
-  const templates = [
-    `${firstName}さん、今日の卦は「${hex.name}」。\n\n${hex.meaning}\n\nあなたの数は${lifepath.number}。${lifepath.meaning}\n\n${kyusei.name}に生まれ、${eto.jikkan}${eto.junishi}の干支を持つあなたへ——\n\n${hex.advice}\n\n積み上げてきた時間は、必ず答えになります。`,
-    `「${hex.name}」が出ました。\n\n${hex.meaning}\n\n${firstName}さん、あなたはライフパス${lifepath.number}番。${lifepath.meaning}\n\nその性質が今、静かに問われています。\n\n${kyusei.name}の本質——${kyusei.meaning}\nこれがあなたの地盤です。\n\n${hex.advice}`,
-    `今日の卦——「${hex.name}」。${hex.read}。\n\n${hex.meaning}\n\nライフパス${lifepath.number}のあなたには、${lifepath.meaning}\nこれが天から与えられた性質です。\n\n${kyusei.name}・${eto.jikkan}${eto.junishi}。\nこの組み合わせが示すのは、あなたが思うより強い軸をすでに持っているということ。\n\n${hex.advice}\n\n今日が、静かな分岐点かもしれません。`
-  ];
-
-  const idx = (lifepath.number + hex.name.length) % templates.length;
-  return templates[idx];
-}
-
-// 本音をサーバー(Apps Script)から取得してカードに差し込む。
-// サーバー未応答/未設定時はクライアントの generateWagaText にフォールバック（現行サイトを壊さない）。
+// 本音（WAGAの鑑定）のテンプレートはサーバー(Apps Script)側へ移設済み。
+// クライアント側には存在しないため、ソースをコピーされても本音は取得できない。
+// 本音はサーバーから取得してカードに差し込む。
 async function loadWagaText(ctx){
   var el = document.getElementById('waga-text-slot');
   if (!el) return;
@@ -1351,16 +1338,10 @@ async function loadWagaText(ctx){
     var data = await res.json();
     if (data && data.ok && data.premium && typeof data.premium.wagaText === 'string' && data.premium.wagaText) {
       el.textContent = data.premium.wagaText; // .waga-text は white-space:pre-line なので改行はそのまま活きる
-      console.log('%c[WAGA] 本音: サーバーから取得しました ✓ (server)', 'color:#7dc87d');
       return;
     }
-  } catch (e) { /* 通信失敗 → 下でフォールバック */ }
-  console.warn('[WAGA] 本音: サーバー取得できず、クライアント生成にフォールバックしました (fallback)');
-  if (typeof generateWagaText === 'function') {
-    el.textContent = generateWagaText(ctx);
-  } else {
-    el.textContent = '（本音の取得に失敗しました。時間をおいて再度お試しください）';
-  }
+  } catch (e) { /* 通信失敗時は下でメッセージ表示 */ }
+  el.textContent = '（本音の取得に失敗しました。通信環境をご確認のうえ、時間をおいて再度お試しください）';
 }
 
 
@@ -1941,7 +1922,7 @@ function showResult(name, year, month, day, question) {
   const hex = getHexagram(year, month, day, question);
   const thisYearKyusei = calcNenseiKyusei(year, kyusei.idx);
 
-  const wagaText = (typeof generateWagaText === 'function') ? generateWagaText({ name, lifepath, kyusei, eto, hex, yakudoshi, seimei }) : '';
+  const wagaText = ''; // 本音はサーバーから loadWagaText() で取得（クライアントにテンプレートは持たない）
 
   // 相性計算
   var compatHTML = '';
@@ -2279,12 +2260,7 @@ function showResult(name, year, month, day, question) {
           })()}
         </div>
         <div style="margin:4px 0 16px;padding:14px 16px;background:rgba(200,164,90,0.04);border:1px solid var(--gold-dim);">
-          <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:10px;">GLOW 肌診断とは</div>
-          <div style="font-size:12px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;">
-            40ブランド・864パターンのデータベースから<br>
-            あなたの肌タイプ・悩み・予算に合った<br>
-            スキンケアをたった30秒で提案します。
-          </div>
+          <div style="font-size:13px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;text-align:center;">無料肌診断はこちら</div>
         </div>
         <a href="https://j-waga.github.io/glow-skin/glow_skin_diagnosis.html"
            target="_blank"
