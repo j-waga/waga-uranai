@@ -1570,6 +1570,7 @@ async function loadWagaText(ctx){
     var data = await res.json();
     var pr = (data && data.ok && data.premium) ? data.premium : null;
     if (pr) {
+      if (pr.calendarAdvice) window._calAdvice = pr.calendarAdvice;
       if (el && typeof pr.wagaText === 'string' && pr.wagaText) {
         el.textContent = pr.wagaText; // .waga-text は white-space:pre-line なので改行はそのまま活きる
       }
@@ -1796,96 +1797,27 @@ function showDayDetail(day, lv, mode) {
   const detail = document.getElementById('cal-day-detail');
   if (!detail) return;
 
-  const lvLabels = ['注意日', '普通', '平穏日', '好調日', '好調日', '最高運日'];
-  const modeAdvice = {
-    overall: {
-      5: { label:'★ 最高運日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
-           good:'大切な決断・新しいスタート・人に会う・発信・申し込みに最適な日。迷っていたことを動かすチャンスです。',
-           bad:'' },
-      4: { label:'◎ 好調日', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
-           good:'積極的に動いていい日。会議・交渉・新しい挑戦に向いています。',
-           bad:'' },
-      3: { label:'○ 平穏日', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
-           good:'普通に過ごすのが吉。無理せず、日常の作業を丁寧にこなして。',
-           bad:'' },
-      2: { label:'○ 普通日', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
-           good:'大きな行動は避け、準備・計画に使うといい日。',
-           bad:'' },
-      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
-           good:'特別なことは不要。いつも通りに過ごして。', bad:'' },
-      0: { label:'△ 注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
-           good:'',
-           bad:'大きな決断・契約・投資・喧嘩は避けて。体調管理を優先し、無理なスケジュールは組まないこと。休息が一番の運気回復です。' },
-    },
-    love: {
-      5: { label:'★ 恋愛最高日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
-           good:'告白・デート・プロポーズ・連絡に最適。気になる人に声をかけると吉。感情が素直に伝わりやすい日。',
-           bad:'' },
-      4: { label:'◎ 恋愛好調', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
-           good:'デート・食事・メッセージを送るのに向いています。相手との距離が縮まりやすい。',
-           bad:'' },
-      3: { label:'○ 平穏', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
-           good:'穏やかな関係を保てる日。焦らず自然体で。',
-           bad:'' },
-      2: { label:'ふつう', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
-           good:'無理なアプローチより、日常の積み重ねを大切に。', bad:'' },
-      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
-           good:'特別なことは不要。いつも通りに。', bad:'' },
-      0: { label:'△ 恋愛注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
-           good:'',
-           bad:'感情的な衝突や誤解が起きやすい日。重要な話し合い・告白・別れ話は避けて。相手の言葉を深読みしすぎないように。' },
-    },
-    money: {
-      5: { label:'★ 金運最高日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
-           good:'契約・購入・投資・申し込みに最適な日。財布を新しくする・宝くじを買う・貯金を始めるのも吉。',
-           bad:'' },
-      4: { label:'◎ 金運好調', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
-           good:'お金の動きが活発になりやすい日。見積もり・交渉・価格決定に向いています。',
-           bad:'' },
-      3: { label:'○ 平穏', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
-           good:'日常の出費を把握する・家計を見直すのに向いた日。',
-           bad:'' },
-      2: { label:'ふつう', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
-           good:'大きな買い物より、小さな節約を意識して。', bad:'' },
-      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
-           good:'特別なことは不要。いつも通りに。', bad:'' },
-      0: { label:'△ 金運注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
-           good:'',
-           bad:'衝動買い・大きな契約・投資・お金の貸し借りは避けて。財布のひもを締めて、今日は動かさないのが正解です。' },
-    },
-    work: {
-      5: { label:'★ 仕事最高日', bg:'rgba(200,164,90,0.2)', border:'rgba(200,164,90,0.5)',
-           good:'重要な会議・プレゼン・面接・試験・商談に最適な日。集中力と判断力がピーク。思い切った行動を。',
-           bad:'' },
-      4: { label:'◎ 仕事好調', bg:'rgba(200,164,90,0.1)', border:'rgba(200,164,90,0.3)',
-           good:'企画・提案・新しいタスクのスタートに向いています。上司や取引先との話し合いも吉。',
-           bad:'' },
-      3: { label:'○ 平穏', bg:'rgba(80,160,100,0.1)', border:'rgba(80,160,100,0.3)',
-           good:'普通に仕事をこなす日。丁寧に、着実に。',
-           bad:'' },
-      2: { label:'ふつう', bg:'rgba(60,80,120,0.1)', border:'rgba(60,80,120,0.2)',
-           good:'大きな決断より、準備・整理・計画に使うと◎。', bad:'' },
-      1: { label:'ふつう', bg:'transparent', border:'var(--border)',
-           good:'特別なことは不要。いつも通りに。', bad:'' },
-      0: { label:'△ 仕事注意日', bg:'rgba(140,50,50,0.15)', border:'rgba(140,50,50,0.4)',
-           good:'',
-           bad:'ミスが出やすい日。重要な書類・メール・契約は念入りに確認して。無理なスケジュールは組まず、締め切りがある仕事は前日に済ませておくのが吉。' },
-    },
-  };
-
   const safeLv = Math.max(0, Math.min(5, lv));
-  const cfg = (modeAdvice[mode] || modeAdvice.overall)[safeLv];
+  const LV_STYLE = {"0":{"bg":"rgba(140,50,50,0.15)","border":"rgba(140,50,50,0.4)"},"1":{"bg":"transparent","border":"var(--border)"},"2":{"bg":"rgba(60,80,120,0.1)","border":"rgba(60,80,120,0.2)"},"3":{"bg":"rgba(80,160,100,0.1)","border":"rgba(80,160,100,0.3)"},"4":{"bg":"rgba(200,164,90,0.1)","border":"rgba(200,164,90,0.3)"},"5":{"bg":"rgba(200,164,90,0.2)","border":"rgba(200,164,90,0.5)"}};
+  // アドバイス本文はサーバー（buildPremium.calendarAdvice）から取得してキャッシュ。クライアントには文章を持たない。
+  const adv = window._calAdvice;
+  if (!adv) {
+    detail.innerHTML = '<div style="padding:14px 16px;border:1px solid var(--border);border-radius:2px;font-size:13px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;">アドバイスを読み込み中です。数秒おいてから、もう一度日付をタップしてください。</div>';
+    return;
+  }
+  const cfg = (adv[mode] || adv.overall)[safeLv] || {};
+  const st  = LV_STYLE[safeLv] || LV_STYLE[1];
   const hasGood = cfg.good && cfg.good.length > 0;
   const hasBad  = cfg.bad  && cfg.bad.length  > 0;
 
   detail.innerHTML =
-    '<div style="padding:14px 16px;border:1px solid ' + cfg.border + ';background:' + cfg.bg + ';border-radius:2px;">'
+    '<div style="padding:14px 16px;border:1px solid ' + st.border + ';background:' + st.bg + ';border-radius:2px;">'
     + '<div style="font-size:11px;color:var(--gold);letter-spacing:0.2em;margin-bottom:10px;">'
-    + _calMonth + '月' + day + '日　' + cfg.label + '</div>'
+    + _calMonth + '月' + day + '日\u3000' + (cfg.label || '') + '</div>'
     + (hasGood ? '<div style="font-size:13px;color:var(--text-bright);line-height:2;letter-spacing:0.05em;">'
-      + '✦ ' + cfg.good + '</div>' : '')
+      + '\u2726 ' + cfg.good + '</div>' : '')
     + (hasBad  ? '<div style="font-size:13px;color:#d09090;line-height:2;letter-spacing:0.05em;' + (hasGood ? 'margin-top:8px;' : '') + '">'
-      + '⚠ ' + cfg.bad + '</div>' : '')
+      + '\u26a0 ' + cfg.bad + '</div>' : '')
     + '</div>';
 }
 
