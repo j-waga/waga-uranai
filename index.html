@@ -968,9 +968,9 @@ var PASSCODES = {
   dm:     ['WAGADM01']
 };
 
-// ▼ サーバー(Apps Script)のウェブアプリURL。空なら従来どおりクライアント内で本音を生成。
-//   ★推奨は末尾 /exec のURL（デプロイを管理 で取得）。下は暫定で頂いたURLを設定。
-const WAGA_API_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnQSZuN3J9kvFQeDf-mJ4-xN6oVR65z6GIrSDScKhrRt0dlxZSGCUFMocUY3P9TIrnSm39QhMx2hv5IScx5PGLMD8U7_qgQ1teoKnLKfA9DZ9rpDVsflaB-bN0U4-N-SO5-_Y2nOx7uUXxS1DppKw33uL2R9qg5dKSN2EuY5Y_woeECmTD9qMyggW7rfHt9BjkxvBSHkyA9Dz9MHyHz8wBiyZE18PPXYi5iCB3f5KRsrkpaw56f9BPgUCl98OFeG4SNX4ZVwfZH4YhSqMsU&lib=M_WxQoAXje5hwQZ1lOKstgDyQ39-dUWDH';
+// ▼ サーバー(Apps Script)のウェブアプリURL（末尾 /exec）。本音はここから取得される。
+//   空にすると従来どおりクライアント内で生成（フォールバック）。
+const WAGA_API_URL = 'https://script.google.com/macros/s/AKfycbx-YLnFoAJFDDzom-tf2KASKWiiTYYbsCCiDSobyQ5gTb3-A2gKuSwGvZ7u00p4HYc/exec';
 function storeCode(c){ try{ sessionStorage.setItem('waga_code', c); }catch(e){} }
 function getCode(){ try{ return sessionStorage.getItem('waga_code') || ''; }catch(e){ return ''; } }
 
@@ -1351,9 +1351,11 @@ async function loadWagaText(ctx){
     var data = await res.json();
     if (data && data.ok && data.premium && typeof data.premium.wagaText === 'string' && data.premium.wagaText) {
       el.textContent = data.premium.wagaText; // .waga-text は white-space:pre-line なので改行はそのまま活きる
+      console.log('%c[WAGA] 本音: サーバーから取得しました ✓ (server)', 'color:#7dc87d');
       return;
     }
   } catch (e) { /* 通信失敗 → 下でフォールバック */ }
+  console.warn('[WAGA] 本音: サーバー取得できず、クライアント生成にフォールバックしました (fallback)');
   if (typeof generateWagaText === 'function') {
     el.textContent = generateWagaText(ctx);
   } else {
