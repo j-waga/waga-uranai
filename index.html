@@ -1571,6 +1571,13 @@ async function loadWagaText(ctx){
     var pr = (data && data.ok && data.premium) ? data.premium : null;
     if (pr) {
       if (pr.calendarAdvice) window._calAdvice = pr.calendarAdvice;
+      if (pr.compat) {
+        var _sc = function(id,v){ var e=document.getElementById(id); if(e&&v!=null&&v!=='') e.textContent=v; };
+        _sc('compat-comment',pr.compat.comment); _sc('compat-advice',pr.compat.advice);
+        _sc('compat-strength',pr.compat.strength); _sc('compat-challenge',pr.compat.challenge);
+        _sc('compat-biomsg',pr.compat.bioMsg); _sc('compat-bioadvice',pr.compat.bioAdvice);
+        _sc('compat-waga',pr.compat.wagaCompatText);
+      }
       if (el && typeof pr.wagaText === 'string' && pr.wagaText) {
         el.textContent = pr.wagaText; // .waga-text は white-space:pre-line なので改行はそのまま活きる
       }
@@ -1593,6 +1600,7 @@ async function loadWagaText(ctx){
   if (tw) tw.textContent = fail;
   if (tm) tm.textContent = fail;
   if (ty) ty.textContent = fail;
+  ['compat-comment','compat-advice','compat-strength','compat-challenge','compat-biomsg','compat-bioadvice','compat-waga'].forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=fail; });
 }
 
 
@@ -1884,19 +1892,15 @@ function calcCompatibility(myYear, myMonth, myDay, myName, pYear, pMonth, pDay, 
   var myEto = (myYear - 4) % 12;
   var pEto  = (pYear  - 4) % 12;
 
-  // ライフパス相性（差が小さいほど高い）
   var lpDiff = Math.abs(myLp - pLp);
   var lpScore = lpDiff === 0 ? 100 : lpDiff <= 2 ? 85 : lpDiff <= 4 ? 70 : lpDiff <= 6 ? 55 : 40;
 
-  // 九星相性（三合・六合・比和・相剋）
   var ksDiff = Math.abs(myKs - pKs) % 9;
   var ksScore = ksDiff === 0 ? 95 : ksDiff === 3 || ksDiff === 6 ? 90 : ksDiff === 1 || ksDiff === 8 ? 75 : ksDiff === 4 || ksDiff === 5 ? 55 : 70;
 
-  // 干支相性
   var etoDiff = Math.abs(((myEto + 12) % 12) - ((pEto + 12) % 12));
   var etoScore = etoDiff === 0 ? 90 : etoDiff === 4 || etoDiff === 8 ? 95 : etoDiff === 6 ? 85 : etoDiff === 3 || etoDiff === 9 ? 70 : 75;
 
-  // 名前画数相性
   var mySei = calcSeimei(myName).jinKaku.value;
   var pSei  = calcSeimei(pName).jinKaku.value;
   var nameDiff = Math.abs(mySei - pSei) % 9;
@@ -1904,116 +1908,20 @@ function calcCompatibility(myYear, myMonth, myDay, myName, pYear, pMonth, pDay, 
 
   var overall = Math.round(lpScore * 0.3 + ksScore * 0.25 + etoScore * 0.25 + nameScore * 0.2);
 
-  // 相性コメント
-  var comment, advice;
-  if (overall >= 88) {
-    comment = '魂の共鳴。この出会いには深い意味があります。';
-    advice  = '自然体でいるだけで関係が深まります。焦らず、ありのままの自分で向き合って。';
-  } else if (overall >= 75) {
-    comment = '強い引き合い。互いに高め合える関係性。';
-    advice  = '価値観は近いけれど、少し違う部分が刺激になります。その違いを楽しんで。';
-  } else if (overall >= 62) {
-    comment = '補い合う関係。お互いに足りないものを持ち合っている。';
-    advice  = '最初は少し距離を感じるかもしれません。でも時間をかけるほど深まる縁です。';
-  } else if (overall >= 50) {
-    comment = '成長し合える縁。簡単ではないが得るものは大きい。';
-    advice  = '衝突が起きやすい組み合わせ。でも乗り越えるたびに絆が強くなります。';
-  } else {
-    comment = '刺激的な縁。違いが多い分、学びも多い関係。';
-    advice  = '無理に合わせようとしないこと。お互いの違いを認め、距離感を大切にして。';
-  }
-
-  // ── 相性の強み
-  var strength;
-  if (lpScore >= 85 && ksScore >= 85) {
-    strength = '価値観と感性の両方が重なる稀な組み合わせ。一緒にいるだけで互いのエネルギーが高まります。';
-  } else if (lpScore >= 85) {
-    strength = '人生の方向性と価値観がよく合っています。長期的な関係ほど安定感が増していきます。';
-  } else if (ksScore >= 85) {
-    strength = '気の流れが自然に合う関係。一緒にいて疲れない、居心地の良さが強みです。';
-  } else if (etoScore >= 90) {
-    strength = '干支の相性が抜群。直感的に惹かれ合う、縁の深い組み合わせです。';
-  } else if (overall >= 75) {
-    strength = '互いに刺激し合い、高め合える関係。一人ではできないことが二人なら叶います。';
-  } else {
-    strength = '違いが多い分、相手から学べることが多い関係。視野が広がる縁です。';
-  }
-
-  // ── 相性の課題
-  var challenge;
-  if (nameScore <= 60 && overall >= 75) {
-    challenge = '表面的な価値観や習慣の違いで摩擦が起きやすい。日常の小さなすり合わせが鍵です。';
-  } else if (lpDiff >= 5) {
-    challenge = '人生の優先順位が異なる場面が出てきます。どちらが正しいかではなく、違いを認める姿勢が大切。';
-  } else if (ksDiff === 4 || ksDiff === 5) {
-    challenge = '気の流れが逆向きになりやすい。お互いが疲れている時は無理に関わらず、距離を置くことも愛情です。';
-  } else if (overall < 62) {
-    challenge = '衝突が起きやすいタイミングがあります。感情的になる前に一呼吸おく習慣が関係を守ります。';
-  } else {
-    challenge = '良い関係だからこそ、甘えすぎに注意。感謝を言葉にする習慣が長続きの秘訣です。';
-  }
-
-  // ── 今月の二人の運気（バイオリズム重ね合わせ）
-  var today = new Date();
+  // バイオリズム重ね合わせ（数値のみ。文章選択はサーバー(buildCompat)で行う）
   var myBio = calcBiorhythm(myYear, myMonth, myDay);
   var pBio  = calcBiorhythm(pYear,  pMonth,  pDay);
   var myAvg = (myBio.physical + myBio.emotional + myBio.intellectual) / 3;
   var pAvg  = (pBio.physical  + pBio.emotional  + pBio.intellectual)  / 3;
   var bioGap = myAvg - pAvg;
-  var bioMsg, bioAdvice;
-  if (myAvg > 0.3 && pAvg > 0.3) {
-    bioMsg    = '二人ともエネルギーが高い時期です。';
-    bioAdvice = '新しいことを一緒に始めるのに最適なタイミング。行動に移すなら今です。';
-  } else if (myAvg > 0.3 && pAvg < -0.3) {
-    bioMsg    = 'あなたは上昇期、相手は低調期です。';
-    bioAdvice = '今はあなたがリードする番。相手を引っ張りすぎず、そっと支える姿勢で。';
-  } else if (myAvg < -0.3 && pAvg > 0.3) {
-    bioMsg    = '相手は上昇期、あなたは低調期です。';
-    bioAdvice = '今月は相手の流れに乗る時期。自分から動くより、相手に委ねてみて。';
-  } else if (myAvg < -0.3 && pAvg < -0.3) {
-    bioMsg    = '二人ともエネルギーが落ち着いている時期です。';
-    bioAdvice = '無理に盛り上げようとしなくていい。ゆっくり過ごす時間が二人の絆を深めます。';
-  } else if (Math.abs(bioGap) > 0.5) {
-    bioMsg    = '二人の運気が少しずれています。';
-    bioAdvice = '気持ちのすれ違いが起きやすい時期。言葉で確認し合うことが大切です。';
-  } else {
-    bioMsg    = '二人の運気は穏やかに安定しています。';
-    bioAdvice = '派手さはないけれど、信頼を積み重ねるのに良い時期。日常の中で絆を育てて。';
-  }
 
-  // ── WAGAの本音（相性版）
-  var wagaCompatText;
-  if (overall >= 88) {
-    wagaCompatText = 'この二人の縁は、偶然ではない。星がそう言っている。大切にしなさい。';
-  } else if (overall >= 75) {
-    wagaCompatText = overall >= 80
-      ? '82点という数字より、二人が笑っている瞬間の数を数えなさい。それが本当の相性だ。'
-      : '高め合える関係というのは、楽な関係ではない。それでも一緒にいる理由がある。それが縁だ。';
-  } else if (overall >= 62) {
-    wagaCompatText = '時間をかけなさい。この縁は、急いで咲かせる花ではない。';
-  } else if (overall >= 50) {
-    wagaCompatText = '簡単な道ではない。でも、乗り越えた先にしか見えない景色がある。';
-  } else {
-    wagaCompatText = '違いは欠点ではない。あなたが持っていないものを、相手は持っている。';
-  }
-
+  // ★相性の本文（comment/advice/strength/challenge/bioMsg/bioAdvice/wagaCompatText）は
+  //   サーバーでのみ生成。クライアントには本文を持たない（コピー対策）。
   return {
-    overall:       overall,
-    lpScore:       lpScore,
-    ksScore:       ksScore,
-    etoScore:      etoScore,
-    nameScore:     nameScore,
-    comment:       comment,
-    advice:        advice,
-    strength:      strength,
-    challenge:     challenge,
-    bioMsg:        bioMsg,
-    bioAdvice:     bioAdvice,
-    wagaCompatText: wagaCompatText,
-    myLp:          myLp,
-    pLp:           pLp,
-    myKyusei:      calcKyusei(myYear).name,
-    pKyusei:       calcKyusei(pYear).name,
+    overall: overall, lpScore: lpScore, ksScore: ksScore, etoScore: etoScore, nameScore: nameScore,
+    lpDiff: lpDiff, ksDiff: ksDiff, myAvg: myAvg, pAvg: pAvg, bioGap: bioGap,
+    myLp: myLp, pLp: pLp,
+    myKyusei: calcKyusei(myYear).name, pKyusei: calcKyusei(pYear).name
   };
 }
 
@@ -2105,29 +2013,6 @@ function showResult(name, year, month, day, question) {
   const thisYearKyusei = calcNenseiKyusei(year, kyusei.idx);
 
   const wagaText = ''; // 本音はサーバーから loadWagaText() で取得（クライアントにテンプレートは持たない）
-
-  // 相性計算
-  var compatHTML = '';
-  if (window._partner) {
-    var p = window._partner;
-    var compat = calcCompatibility(year, month, day, name, p.year, p.month, p.day, p.name);
-    compatHTML = '<div class="r-card">'
-      + '<div class="r-card-head"><div class="r-card-icon"></div><span class="r-card-title">💑 相性鑑定 ― ' + name.replace(/\s/g,'') + ' × ' + p.name.replace(/\s/g,'') + '</span></div>'
-      + '<div class="r-card-body">'
-      + '<div style="text-align:center;padding:16px 0 8px;">'
-      + '<div class="compat-score">' + compat.overall + '<span style="font-size:14px;color:var(--text-dim);">点</span></div>'
-      + '<div style="font-size:12px;color:var(--text-dim);margin-top:4px;letter-spacing:0.1em;">総合相性</div>'
-      + '</div>'
-      + '<div class="compat-bar-wrap"><div class="compat-bar-bg"><div class="compat-bar-fill" style="width:' + compat.overall + '%;"></div></div></div>'
-      + '<div style="margin-top:16px;font-size:14px;color:var(--gold);letter-spacing:0.1em;line-height:1.8;">' + compat.comment + '</div>'
-      + '<div style="margin-top:10px;font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">' + compat.advice + '</div>'
-      + '<div style="margin-top:16px;">'
-      + '<div class="r-row"><span class="r-label">数秘術の相性</span><div class="r-value">あなた ' + compat.myLp + ' × 相手 ' + compat.pLp + '　<span style="color:var(--gold);">' + compat.lpScore + '点</span></div></div>'
-      + '<div class="r-row"><span class="r-label">九星気学の相性</span><div class="r-value">' + compat.myKyusei + ' × ' + compat.pKyusei + '　<span style="color:var(--gold);">' + compat.ksScore + '点</span></div></div>'
-      + '<div class="r-row"><span class="r-label">姓名の相性</span><div class="r-value"><span style="color:var(--gold);">' + compat.nameScore + '点</span></div></div>'
-      + '</div>'
-      + '</div></div>';
-  }
 
   const resultDiv = document.getElementById('result');
   resultDiv.style.display = 'block';
@@ -2363,8 +2248,8 @@ function showResult(name, year, month, day, question) {
           if (accessLevel >= 1) {
             // ── フォロー解放：コメント＋詳細点数
             html += `<div style="margin-top:20px;">
-              <div style="font-size:14px;color:var(--gold);letter-spacing:0.1em;line-height:1.8;">${c.comment}</div>
-              <div style="margin-top:10px;font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">${c.advice}</div>
+              <div style="font-size:14px;color:var(--gold);letter-spacing:0.1em;line-height:1.8;"><span id="compat-comment">…</span></div>
+              <div style="margin-top:10px;font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;"><span id="compat-advice">…</span></div>
               <div style="margin-top:16px;">
                 <div class="r-row"><span class="r-label">数秘術の相性</span><div class="r-value">あなた ${c.myLp} × 相手 ${c.pLp}　<span style="color:var(--gold);">${c.lpScore}点</span></div></div>
                 <div class="r-row"><span class="r-label">九星気学の相性</span><div class="r-value">${c.myKyusei} × ${c.pKyusei}　<span style="color:var(--gold);">${c.ksScore}点</span></div></div>
@@ -2378,23 +2263,23 @@ function showResult(name, year, month, day, question) {
 
                 <div style="margin-bottom:18px;">
                   <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">▶ 二人の強み</div>
-                  <div style="font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">${c.strength}</div>
+                  <div style="font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;"><span id="compat-strength">…</span></div>
                 </div>
 
                 <div style="margin-bottom:18px;">
                   <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:8px;">▶ 注意したいこと</div>
-                  <div style="font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;">${c.challenge}</div>
+                  <div style="font-size:13px;color:var(--text);line-height:2;letter-spacing:0.05em;"><span id="compat-challenge">…</span></div>
                 </div>
 
                 <div style="margin-bottom:18px;padding:14px 16px;background:rgba(200,164,90,0.04);border:1px solid var(--border);">
                   <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:10px;">▶ 今月の二人の運気</div>
-                  <div style="font-size:13px;color:var(--gold);letter-spacing:0.05em;margin-bottom:6px;">${c.bioMsg}</div>
-                  <div style="font-size:12px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;">${c.bioAdvice}</div>
+                  <div style="font-size:13px;color:var(--gold);letter-spacing:0.05em;margin-bottom:6px;"><span id="compat-biomsg">…</span></div>
+                  <div style="font-size:12px;color:var(--text-dim);line-height:2;letter-spacing:0.05em;"><span id="compat-bioadvice">…</span></div>
                 </div>
 
                 <div style="padding:16px;background:rgba(255,255,255,0.02);border-left:2px solid var(--gold-dim);">
                   <div style="font-size:11px;color:var(--gold-dim);letter-spacing:0.25em;margin-bottom:10px;">WAGA の本音</div>
-                  <div style="font-size:13px;color:var(--text);line-height:2.2;letter-spacing:0.08em;font-style:italic;">${c.wagaCompatText}</div>
+                  <div style="font-size:13px;color:var(--text);line-height:2.2;letter-spacing:0.08em;font-style:italic;"><span id="compat-waga">…</span></div>
                   <div style="font-size:11px;color:var(--gold-dim);text-align:right;margin-top:8px;letter-spacing:0.2em;">― WAGA</div>
                 </div>
 
@@ -2475,7 +2360,12 @@ function showResult(name, year, month, day, question) {
 
   // 本音（WAGAの鑑定）をサーバー側から取得（解放済み＆URL設定時のみ）
   if (accessLevel >= 1 && WAGA_API_URL) {
-    loadWagaText({ name, lifepath, kyusei, eto, hex });
+    var _ctx = { name, lifepath, kyusei, eto, hex };
+    if (window._partner) {
+      var _pp = window._partner;
+      _ctx.compat = calcCompatibility(year, month, day, name, _pp.year, _pp.month, _pp.day, _pp.name);
+    }
+    loadWagaText(_ctx);
   }
 
   // カード出現アニメーション
