@@ -960,13 +960,9 @@ body::before {
 // パスコード・アクセス制御
 // ══════════════════════════════════════════
 
-// ★ パスコードはここで管理。毎週変更する。
-// follow: フォロー解放コード（毎週更新）
-// dm:     DM解放コード（固定またはユーザー個別）
-var PASSCODES = {
-  follow: ['WAGA0509', 'WAGA0516', 'WAGA0523'], // 今週・来週・再来週分
-  dm:     ['WAGADM01']
-};
+// ★ パスコードはサーバー(Apps Script)の コード.gs にのみ存在（PASSCODES）。
+//   クライアントには正解を持たない＝ソースを見ても漏れない。変更はサーバー1か所＋再デプロイのみ。
+//   照合は submitPasscode() がサーバーの action:'unlock' に問い合わせて行う。
 
 // ▼ サーバー(Apps Script)のウェブアプリURL（末尾 /exec）。本音はここから取得される。
 //   空にすると従来どおりクライアント内で生成（フォールバック）。
@@ -1000,27 +996,40 @@ function closePasscode() {
   if (overlay) overlay.style.display = 'none';
 }
 
-function submitPasscode() {
+async function submitPasscode() {
   var input = document.getElementById('passcode-input');
   var errEl = document.getElementById('passcode-error');
+  var btn   = document.querySelector('.passcode-btn');
   if (!input) return;
   var code = input.value.trim().toUpperCase();
+  if (!code) { if (errEl) { errEl.textContent = 'パスコードが違います'; errEl.style.display = 'block'; } return; }
 
-  if (PASSCODES.dm.indexOf(code) >= 0) {
-    setAccessLevel('dm');
-    storeCode(code);
-    closePasscode();
-    refreshResult();
-    return;
+  // 照合はサーバー(Apps Script)の action:'unlock' に問い合わせる。
+  // 正解はサーバーの コード.gs にのみ存在するため、クライアント側では判定しない。
+  if (errEl) errEl.style.display = 'none';
+  var prevLabel = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '確認中…'; }
+
+  try {
+    var res = await fetch(WAGA_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // text/plain でCORSプリフライト回避
+      body: JSON.stringify({ action: 'unlock', code: code })
+    });
+    var data = await res.json();
+    if (data && data.ok && data.level > 0) {
+      setAccessLevel(data.level >= 2 ? 'dm' : 'follow');
+      storeCode(code);
+      if (btn) { btn.disabled = false; btn.textContent = prevLabel; }
+      closePasscode();
+      refreshResult();
+      return;
+    }
+    if (errEl) { errEl.textContent = 'パスコードが違います'; errEl.style.display = 'block'; }
+  } catch (e) {
+    if (errEl) { errEl.textContent = '通信に失敗しました。時間をおいて再度お試しください'; errEl.style.display = 'block'; }
   }
-  if (PASSCODES.follow.indexOf(code) >= 0) {
-    setAccessLevel('follow');
-    storeCode(code);
-    closePasscode();
-    refreshResult();
-    return;
-  }
-  if (errEl) { errEl.style.display = 'block'; }
+  if (btn) { btn.disabled = false; btn.textContent = prevLabel; }
 }
 
 // Enterキーでも送信
